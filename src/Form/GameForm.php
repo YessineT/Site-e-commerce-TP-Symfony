@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class GameForm extends AbstractType
 {
@@ -39,9 +40,12 @@ class GameForm extends AbstractType
             ->add('releaseDate')
             ->add('isFree')
             ->add('freeUntil')
-            ->add('thumbnail', FileType::class, [
-                'label' => 'Thumbnail Image',
+            ->add('thumbnailFile', VichFileType::class, [
                 'required' => false,
+                'allow_delete' => true,
+                'download_uri' => false,
+                'label' => 'Game Thumbnail',
+                'delete_label' => 'Remove image',
             ])
             ->add('minOs')
             ->add('minProcessor')
