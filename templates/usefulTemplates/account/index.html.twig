@@ -1,0 +1,127 @@
+{# templates/account/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}My Account - GameHub{% endblock %}
+
+{% block body %}
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-secondary mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Account Settings</h5>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="{{ path('app_account') }}" class="list-group-item list-group-item-action bg-transparent text-white {{ app.request.get('_route') == 'app_account' ? 'active' }}">
+                                <i class="fas fa-user-circle me-2"></i> Profile
+                            </a>
+                            <a href="{{ path('app_account_security') }}" class="list-group-item list-group-item-action bg-transparent text-white {{ app.request.get('_route') == 'app_account_security' ? 'active' }}">
+                                <i class="fas fa-lock me-2"></i> Security
+                            </a>
+                            <a href="{{ path('app_account_payment') }}" class="list-group-item list-group-item-action bg-transparent text-white {{ app.request.get('_route') == 'app_account_payment' ? 'active' }}">
+                                <i class="fas fa-credit-card me-2"></i> Payment Methods
+                            </a>
+                            <a href="{{ path('app_account_orders') }}" class="list-group-item list-group-item-action bg-transparent text-white {{ app.request.get('_route') == 'app_account_orders' ? 'active' }}">
+                                <i class="fas fa-receipt me-2"></i> Order History
+                            </a>
+                            <a href="{{ path('app_account_wishlist') }}" class="list-group-item list-group-item-action bg-transparent text-white {{ app.request.get('_route') == 'app_account_wishlist' ? 'active' }}">
+                                <i class="fas fa-heart me-2"></i> Wishlist
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="card bg-secondary">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="mb-0">My Profile</h3>
+                            <a href="{{ path('app_account_edit') }}" class="btn btn-sm btn-outline-light">Edit Profile</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 text-center">
+                                    <img src="{{ asset(app.user.avatarPath ? 'uploads/avatars/' ~ app.user.avatarPath : 'images/default-avatar.png') }}"
+                                         class="rounded-circle mb-3" width="150" alt="Profile Picture">
+                                    <div class="mb-3">
+                                        <span class="badge bg-{{ app.user.isVerified ? 'success' : 'warning' }}">
+                                            {{ app.user.isVerified ? 'Verified' : 'Not Verified' }}
+                                        </span>
+                                    </div>
+                                    <a href="{{ path('app_account_avatar') }}" class="btn btn-sm btn-outline-light">Change Avatar</a>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <h4>{{ app.user.firstName }} {{ app.user.lastName }}</h4>
+                                        <p class="text-muted">@{{ app.user.username }}</p>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <p><strong>Email:</strong> {{ app.user.email }}</p>
+                                            <p><strong>Phone:</strong> {{ app.user.phone ?? 'Not provided' }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Member since:</strong> {{ app.user.createdAt|date('F j, Y') }}</p>
+                                            <p><strong>Last login:</strong> {{ app.user.lastLogin|date('F j, Y H:i') }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <h5>Bio</h5>
+                                        <p>{{ app.user.bio ?? 'No bio yet' }}</p>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="card bg-dark text-center p-3">
+                                                <h3 class="text-primary">{{ app.user.gamesOwned|length }}</h3>
+                                                <p class="mb-0">Games Owned</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card bg-dark text-center p-3">
+                                                <h3 class="text-primary">{{ app.user.totalHoursPlayed }}</h3>
+                                                <p class="mb-0">Hours Played</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card bg-dark text-center p-3">
+                                                <h3 class="text-primary">{{ app.user.friends|length }}</h3>
+                                                <p class="mb-0">Friends</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-secondary mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recently Played</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if recentlyPlayed|length > 0 %}
+                                <div class="row">
+                                    {% for game in recentlyPlayed %}
+                                        <div class="col-md-3 mb-3">
+                                            <div class="game-card-sm">
+                                                <img src="{{ asset('uploads/games/' ~ game.image) }}" class="img-fluid rounded" alt="{{ game.title }}">
+                                                <div class="mt-2">
+                                                    <h6 class="mb-0">{{ game.title }}</h6>
+                                                    <small class="text-muted">{{ game.lastPlayed|date('M d, Y') }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-muted">No recently played games</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

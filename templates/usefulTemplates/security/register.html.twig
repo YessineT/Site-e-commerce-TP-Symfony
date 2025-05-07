@@ -1,0 +1,62 @@
+{# templates/registration/register.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Register - GameHub{% endblock %}
+
+{% block body %}
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card bg-secondary">
+                        <div class="card-header">
+                            <h3 class="mb-0">Create Your Account</h3>
+                        </div>
+                        <div class="card-body">
+                            {{ form_start(registrationForm) }}
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form_row(registrationForm.firstName) }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form_row(registrationForm.lastName) }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                {{ form_row(registrationForm.username) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_row(registrationForm.email) }}
+                            </div>
+                            <div class="mb-3">
+                                {{ form_row(registrationForm.plainPassword) }}
+                            </div>
+                            <div class="mb-3 form-check">
+                                {{ form_row(registrationForm.agreeTerms) }}
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                            {{ form_end(registrationForm) }}
+                        </div>
+                        <div class="card-footer text-center">
+                            Already have an account? <a href="{{ path('app_login') }}" class="text-primary">Sign in</a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <p class="text-muted">Or register with:</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{{ path('connect_google_start') }}" class="btn btn-outline-light">
+                                <i class="fab fa-google me-2"></i> Google
+                            </a>
+                            <a href="{{ path('connect_facebook_start') }}" class="btn btn-outline-light">
+                                <i class="fab fa-facebook-f me-2"></i> Facebook
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
