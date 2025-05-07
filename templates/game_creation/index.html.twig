@@ -3,60 +3,73 @@
 {% block title %}Submit New Game{% endblock %}
 
 {% block body %}
-    <div class="container py-5">
-        <h1 class="mb-4">Submit New Game</h1>
+    <div class="container py-5" style="background-color: #121212; min-height: 100vh;">
+        <div class="text-center mb-5">
+            <h1 class="text-white display-4 fw-bold">Submit New Game</h1>
+        </div>
 
-        <div class="card shadow">
-            <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
                 {{ form_start(form) }}
-                <div class="row">
-                    <div class="col-md-8">
-                        {{ form_row(form.title) }}
-                        {{ form_row(form.description) }}
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form_row(form.price) }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form_row(form.releaseDate) }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="mb-4">
-                            <small class="text-muted">Recommended size: 600x400px</small>
-                        </div>
-
-                        {{ form_row(form.genre) }}
-                        {{ form_row(form.platforms) }}
-                    </div>
+                <div class="mb-4">
+                    {{ form_row(form.title, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
                 </div>
 
-                <hr>
+                <div class="mb-4">
+                    {{ form_row(form.description, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                </div>
 
-                <h4 class="mb-3">System Requirements</h4>
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col-md-6">
-                        <h5>Minimum</h5>
-                        {{ form_row(form.minOs) }}
-                        {{ form_row(form.minProcessor) }}
-                        {{ form_row(form.minMemory) }}
+                        {{ form_row(form.price, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
                     </div>
                     <div class="col-md-6">
-                        <h5>Recommended</h5>
-                        {{ form_row(form.recOs) }}
-                        {{ form_row(form.recProcessor) }}
-                        {{ form_row(form.recMemory) }}
+                        {{ form_row(form.releaseDate, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
                     </div>
                 </div>
 
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fas fa-paper-plane me-2"></i> Submit for Review
-                    </button>
+                <div class="mb-4">
+                    {{ form_row(form.thumbnailFile, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                    <small class="text-muted">Recommended size: 600x400px</small>
                 </div>
+
+                <div class="mb-4">
+                    {{ form_row(form.genre, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_row(form.platforms, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                </div>
+
+                <h4 class="text-white mb-3">System Requirements</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h5 class="text-white">Minimum</h5>
+                        {{ form_row(form.minOs, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.minProcessor, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.minMemory, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.minGraphics, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.minStorage, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <h5 class="text-white">Recommended</h5>
+                        {{ form_row(form.recOs, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.recProcessor, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.recMemory, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.recGraphics, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                        {{ form_row(form.recStorage, {'attr': {'class': 'form-control bg-dark text-white'}}) }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    {{ form_widget(form.submit, {
+                        'attr': {
+                            'class': 'btn btn-dark text-uppercase fw-bold px-5 py-3'
+                        }
+                    }) }}
+                </div>
+
                 {{ form_end(form) }}
             </div>
         </div>

@@ -6,6 +6,7 @@ use App\Entity\Game;
 use App\Form\GameForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,7 +17,8 @@ final class GameCreationController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $game = new Game();
-        $form = $this->createForm(GameForm::class, $game);
+        $form = $this->createForm(GameForm::class, $game)
+                    ->add('submit', SubmitType::class, []);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

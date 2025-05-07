@@ -9,11 +9,14 @@ use App\Entity\Platform;
 use App\Entity\Publisher;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
@@ -27,9 +30,8 @@ class GameForm extends AbstractType
                     new NotBlank(['message' => 'Please enter a title']),
                 ]
             ])
-            ->add('slug')
-            ->add('description')
-            ->add('shortDescription')
+            ->add('description', TextareaType::class, [])
+            ->add('shortDescription', TextareaType::class, [])
             ->add('price', MoneyType::class, [
                 'constraints' => [
                     new NotBlank(['message' => 'Please enter a price']),
@@ -38,14 +40,19 @@ class GameForm extends AbstractType
                 'currency' => 'TD'
             ])
             ->add('releaseDate')
-            ->add('isFree')
-            ->add('freeUntil')
             ->add('thumbnailFile', VichFileType::class, [
                 'required' => false,
                 'allow_delete' => true,
                 'download_uri' => false,
-                'label' => 'Game Thumbnail',
                 'delete_label' => 'Remove image',
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => ['image/jpeg', 'image/png'],
+                        'mimeTypesMessage' => 'Please upload a valid image',
+                        'maxSizeMessage' => 'File too large (max {{ limit }} {{ suffix }})',
+                    ])
+                ]
             ])
             ->add('minOs')
             ->add('minProcessor')
@@ -56,24 +63,29 @@ class GameForm extends AbstractType
             ->add('recProcessor')
             ->add('recMemory')
             ->add('recGraphics')
-            ->add('recStorage')
-            ->add('updatedAt')
+            ->add('recStorage', null, [
+                'required' => false,
+            ])
             ->add('developer', EntityType::class, [
                 'class' => Developer::class,
                 'choice_label' => 'id',
+                'required' => false,
             ])
             ->add('publisher', EntityType::class, [
                 'class' => Publisher::class,
                 'choice_label' => 'id',
+                'required' => false,
             ])
             ->add('genre', EntityType::class, [
                 'class' => Genre::class,
                 'choice_label' => 'id',
+                'required' => false,
             ])
             ->add('platforms', EntityType::class, [
                 'class' => Platform::class,
                 'choice_label' => 'id',
                 'multiple' => true,
+                'required' => false,
             ])
         ;
     }
