@@ -1,0 +1,27 @@
+vich_uploader:
+  db_driver: orm
+
+  mappings:
+    game_images:
+      uri_prefix: /uploads/games
+      upload_destination: '%kernel.project_dir%/public/uploads/games'
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+      inject_on_load: false
+      delete_on_update: true
+      delete_on_remove: true
+
+    game_screenshots:
+      uri_prefix: /uploads/screenshots
+      upload_destination: '%kernel.project_dir%/public/uploads/screenshots'
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+      inject_on_load: false
+      delete_on_update: true
+      delete_on_remove: true
+
+    user_avatars:
+      uri_prefix: /uploads/avatars
+      upload_destination: '%kernel.project_dir%/public/uploads/avatars'
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+      inject_on_load: false
+      delete_on_update: true
+      delete_on_remove: true
