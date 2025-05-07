@@ -1,0 +1,77 @@
+{# templates/store/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}GameHub - Store{% endblock %}
+
+{% block body %}
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-title mb-0">Game Store</h2>
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+                        Sort By: {{ sortOptions[app.request.query.get('sort', 'popular')] }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for key, option in sortOptions %}
+                            <li><a class="dropdown-item" href="{{ path('app_store', {sort: key}) }}">{{ option }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-secondary mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Filters</h5>
+                        </div>
+                        <div class="card-body">
+                            {{ form_start(filterForm) }}
+                            {{ form_row(filterForm.genres) }}
+                            {{ form_row(filterForm.priceRange) }}
+                            {{ form_row(filterForm.platforms) }}
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                            {{ form_end(filterForm) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        {% for game in games %}
+                            <div class="col-md-4 mb-4">
+                                <div class="game-card">
+                                    <img src="{{ asset('uploads/games/' ~ game.image) }}" alt="{{ game.title }} Cover">
+                                    <div class="game-card-body">
+                                        <h5>{{ game.title }}</h5>
+                                        <p class="text-secondary">{{ game.genre.name }}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                {% for i in 1..5 %}
+                                                    {% if i <= game.averageRating|round %}
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    {% elseif i == game.averageRating|round(0, 'ceil') and game.averageRating|round != game.averageRating %}
+                                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                                    {% else %}
+                                                        <i class="far fa-star text-warning"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <span class="ms-1">{{ game.averageRating|number_format(1) }}</span>
+                                            </div>
+                                            <span class="game-price">${{ game.price|number_format(2) }}</span>
+                                        </div>
+                                        <a href="{{ path('app_game_show', {id: game.id, slug: game.slug}) }}" class="stretched-link"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ knp_pagination_render(games) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
