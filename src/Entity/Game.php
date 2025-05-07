@@ -105,6 +105,19 @@ class Game
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\Column(length: 20)]
+    private string $status = 'draft'; // draft|pending_review|approved|rejected
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $submittedBy = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $submittedAt = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $rejectionReason = null;
+
     public function __construct()
     {
         $this->platforms = new ArrayCollection();
@@ -539,6 +552,54 @@ class Game
                 $download->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getSubmittedAt(): ?\DateTime
+    {
+        return $this->submittedAt;
+    }
+
+    public function setSubmittedAt(\DateTime $submittedAt): static
+    {
+        $this->submittedAt = $submittedAt;
+
+        return $this;
+    }
+
+    public function getRejectionReason(): ?string
+    {
+        return $this->rejectionReason;
+    }
+
+    public function setRejectionReason(?string $rejectionReason): static
+    {
+        $this->rejectionReason = $rejectionReason;
+
+        return $this;
+    }
+
+    public function getSubmittedBy(): ?User
+    {
+        return $this->submittedBy;
+    }
+
+    public function setSubmittedBy(?User $submittedBy): static
+    {
+        $this->submittedBy = $submittedBy;
 
         return $this;
     }

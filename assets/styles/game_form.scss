@@ -1,0 +1,189 @@
+// Variables
+$primary-color: #6366f1;
+$secondary-color: #f43f5e;
+$glass-bg: rgba(255, 255, 255, 0.1);
+$border-radius: 12px;
+
+.game-submission-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+// Stepper
+.stepper-wrapper {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--bs-gray-200);
+        z-index: 0;
+    }
+
+    .stepper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+
+        &.active {
+            .stepper-number {
+                background: $primary-color;
+                color: white;
+                border-color: $primary-color;
+            }
+            .stepper-label {
+                color: $primary-color;
+                font-weight: 600;
+            }
+        }
+
+        .stepper-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--bs-gray-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .stepper-label {
+            color: var(--bs-gray-600);
+            font-size: 0.9rem;
+        }
+    }
+}
+
+// Glassmorphism Card
+.glassmorphism-card {
+    background: $glass-bg;
+    backdrop-filter: blur(10px);
+    border-radius: $border-radius;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    padding: 2rem;
+}
+
+.form-title {
+    color: var(--bs-heading-color);
+    margin-bottom: 2rem;
+    font-weight: 700;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+}
+
+// Form Steps
+.form-step {
+    display: none;
+    animation: fadeIn 0.5s ease;
+
+    &.active {
+        display: block;
+    }
+}
+
+.section-title {
+    color: var(--bs-heading-color);
+    margin: 1.5rem 0 1rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+// Upload Preview
+.upload-preview-wrapper {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+
+    .preview-container {
+        width: 200px;
+        height: 120px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px dashed var(--bs-gray-300);
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .upload-controls {
+        flex: 1;
+
+        .upload-input {
+            display: none;
+        }
+
+        .upload-label {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: rgba($primary-color, 0.1);
+            }
+        }
+    }
+}
+
+// Guidelines Sidebar
+.guidelines-sidebar {
+    position: sticky;
+    top: 1rem;
+    height: fit-content;
+
+    .guideline-card {
+        background: var(--bs-light);
+        border-radius: $border-radius;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+
+        h5 {
+            color: var(--bs-heading-color);
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .guideline-list {
+            padding-left: 1.25rem;
+            margin: 0;
+
+            li {
+                margin-bottom: 0.5rem;
+                color: var(--bs-gray-600);
+            }
+        }
+    }
+}
+
+// Animations
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

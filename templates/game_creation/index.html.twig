@@ -1,0 +1,187 @@
+{# templates/game/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('game_form') }}
+{% endblock %}
+
+{% block body %}
+    <div class="game-submission-container">
+        <!-- Progress Stepper -->
+        <div class="stepper-wrapper">
+            <div class="stepper active" data-step="1">
+                <span class="stepper-number">1</span>
+                <span class="stepper-label">Basic Info</span>
+            </div>
+            <div class="stepper" data-step="2">
+                <span class="stepper-number">2</span>
+                <span class="stepper-label">Details</span>
+            </div>
+            <div class="stepper" data-step="3">
+                <span class="stepper-number">3</span>
+                <span class="stepper-label">Media</span>
+            </div>
+            <div class="stepper" data-step="4">
+                <span class="stepper-number">4</span>
+                <span class="stepper-label">Review</span>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-card glassmorphism-card">
+            <h1 class="form-title">
+                <i class="fas fa-gamepad me-2"></i> Submit New Game
+            </h1>
+
+            {{ form_start(form) }}
+            <!-- Step 1 Content -->
+            <div class="form-step active" id="step-1">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        {{ form_row(form.title, {
+                            'attr': {
+                                'class': 'form-control-lg',
+                                'placeholder': 'Enter game title'
+                            },
+                            'row_attr': {'class': 'form-floating mb-4'}
+                        }) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(form.genre, {
+                            'attr': {'class': 'select2'},
+                            'row_attr': {'class': 'form-floating mb-4'}
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="form-floating mb-4">
+                    {{ form_widget(form.description, {
+                        'attr': {
+                            'class': 'form-control',
+                            'style': 'height: 150px',
+                            'data-controller': 'textarea-autogrow'
+                        }
+                    }) }}
+                    {{ form_label(form.description) }}
+                    <div class="form-text">Minimum 200 characters</div>
+                </div>
+            </div>
+
+            <!-- Step 2 Content -->
+            <div class="form-step" id="step-2">
+                <!-- Pricing Section -->
+                <div class="pricing-section mb-5">
+                    <h5 class="section-title">
+                        <i class="fas fa-tag me-2"></i> Pricing
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.price, {
+                                'attr': {'class': 'form-control-lg'},
+                                'row_attr': {'class': 'form-floating'}
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch mt-3">
+                                {{ form_widget(form.isFree, {
+                                    'attr': {'class': 'form-check-input', 'data-action': 'change->pricing#toggleFree'}
+                                }) }}
+                                <label class="form-check-label" for="{{ form.isFree.vars.id }}">
+                                    Free Game
+                                </label>
+                            </div>
+                            <div id="freeUntilContainer" class="mt-3" style="display: none;">
+                                {{ form_row(form.freeUntil) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Requirements Section -->
+                <div class="requirements-accordion">
+                    <h5 class="section-title">
+                        <i class="fas fa-laptop me-2"></i> System Requirements
+                    </h5>
+                    <div class="accordion" id="requirementsAccordion">
+                        <!-- Accordion items for min/rec requirements -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 Content -->
+            <div class="form-step" id="step-3">
+                <div class="media-upload-container">
+                    <!-- Thumbnail Upload with Preview -->
+                    <div class="thumbnail-upload mb-5">
+                        <h5 class="section-title">
+                            <i class="fas fa-image me-2"></i> Thumbnail
+                        </h5>
+                        <div class="upload-preview-wrapper">
+                            <div class="preview-container">
+                                <img id="thumbnailPreview" src="{{ asset('images/default-thumbnail.jpg') }}"
+                                     class="img-thumbnail preview-image" alt="Thumbnail preview">
+                            </div>
+                            <div class="upload-controls">
+                                {{ form_widget(form.thumbnailFile, {
+                                    'attr': {
+                                        'class': 'upload-input',
+                                        'data-action': 'change->preview#updateThumbnail'
+                                    }
+                                }) }}
+                                <label for="{{ form.thumbnailFile.vars.id }}" class="upload-label btn btn-outline-primary">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i> Choose File
+                                </label>
+                                <div class="form-text">Recommended: 1280x720px JPG/PNG</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Screenshots Upload -->
+                    <div class="screenshots-upload">
+                        <h5 class="section-title">
+                            <i class="fas fa-images me-2"></i> Screenshots
+                        </h5>
+                        <div class="dropzone" id="screenshotsDropzone">
+                            <div class="dz-message">
+                                <i class="fas fa-cloud-upload-alt fa-3x"></i>
+                                <h4>Drag & drop screenshots here</h4>
+                                <span class="text-muted">or click to browse (max 5)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="form-navigation mt-4">
+                <button type="button" class="btn btn-outline-secondary me-2" id="prevBtn" disabled>
+                    <i class="fas fa-arrow-left me-2"></i> Previous
+                </button>
+                <button type="button" class="btn btn-primary" id="nextBtn">
+                    Next <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+                <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">
+                    <i class="fas fa-paper-plane me-2"></i> Submit Game
+                </button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+
+        <!-- Guidelines Sidebar -->
+        <div class="guidelines-sidebar">
+            <div class="guideline-card">
+                <h5><i class="fas fa-info-circle me-2"></i> Submission Tips</h5>
+                <ul class="guideline-list">
+                    <li>Ensure all fields are complete</li>
+                    <li>Use high-quality images</li>
+                    <li>Be accurate with system requirements</li>
+                </ul>
+            </div>
+            <div class="guideline-card">
+                <h5><i class="fas fa-clock me-2"></i> Review Process</h5>
+                <p>Games typically get reviewed within 3-5 business days</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
