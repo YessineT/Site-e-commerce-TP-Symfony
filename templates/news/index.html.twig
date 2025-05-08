@@ -1,20 +1,34 @@
+{# templates/news/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello NewsController!{% endblock %}
+{% block title %}GameHub - Latest News{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title">Latest News</h2>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+            <div class="row">
+                {% for newsItem in news %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card bg-secondary border-0 h-100">
+                            <img src="{{ asset('uploads/news/' ~ newsItem.image) }}" class="card-img-top" alt="{{ newsItem.title }}">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ newsItem.title }}</h3>
+                                <p class="card-text">{{ newsItem.summary }}</p>
+                                <a href="{{ path('app_news_show', {id: newsItem.id, slug: newsItem.slug}) }}" class="btn btn-sm btn-primary">Read More</a>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <small class="text-muted">Posted {{ newsItem.createdAt|ago }} in {{ newsItem.category.name }}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/src/Controller/NewsController.php</code></li>
-        <li>Your template at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/templates/news/index.html.twig</code></li>
-    </ul>
-</div>
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(news) }}
+            </div>
+        </div>
+    </section>
 {% endblock %}

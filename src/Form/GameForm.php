@@ -54,36 +54,54 @@ class GameForm extends AbstractType
                     ])
                 ]
             ])
-            ->add('minOs')
-            ->add('minProcessor')
-            ->add('minMemory')
-            ->add('minGraphics')
-            ->add('minStorage')
-            ->add('recOs')
-            ->add('recProcessor')
-            ->add('recMemory')
-            ->add('recGraphics')
+            ->add('minOs', null, [
+                'required' => false,
+            ])
+            ->add('minProcessor', null, [
+                'required' => false,
+            ])
+            ->add('minMemory', null, [
+                'required' => false,
+            ])
+            ->add('minGraphics', null, [
+                'required' => false,
+            ])
+            ->add('minStorage', null, [
+                'required' => false,
+            ])
+            ->add('recOs', null, [
+                'required' => false,
+            ])
+            ->add('recProcessor', null, [
+                'required' => false,
+            ])
+            ->add('recMemory', null, [
+                'required' => false,
+            ])
+            ->add('recGraphics', null, [
+                'required' => false,
+            ])
             ->add('recStorage', null, [
                 'required' => false,
             ])
             ->add('developer', EntityType::class, [
                 'class' => Developer::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'required' => false,
             ])
             ->add('publisher', EntityType::class, [
                 'class' => Publisher::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'required' => false,
             ])
             ->add('genre', EntityType::class, [
                 'class' => Genre::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'required' => false,
             ])
             ->add('platforms', EntityType::class, [
                 'class' => Platform::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
                 'required' => false,
             ])

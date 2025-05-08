@@ -1,0 +1,134 @@
+{# templates/news/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ newsItem.title }} - GameHub News{% endblock %}
+
+{% block body %}
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <nav aria-label="breadcrumb" class="mb-4">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ path('app_news') }}">News</a></li>
+                            <li class="breadcrumb-item"><a href="{{ path('app_news_category', {slug: newsItem.category.slug}) }}">{{ newsItem.category.name }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ newsItem.title }}</li>
+                        </ol>
+                    </nav>
+
+                    <article>
+                        <h1 class="mb-3">{{ newsItem.title }}</h1>
+                        <div class="d-flex align-items-center mb-4">
+                            <img src="{{ asset('images/default-avatar.png') }}" class="rounded-circle me-2" width="40" alt="Author">
+                            <div>
+                                <div>By {{ newsItem.author.username }}</div>
+                                <small class="text-muted">Posted {{ newsItem.createdAt|ago }} | {{ newsItem.views }} views</small>
+                            </div>
+                        </div>
+
+                        <img src="{{ asset('uploads/news/' ~ newsItem.image) }}" class="img-fluid rounded mb-4" alt="{{ newsItem.title }}">
+
+                        <div class="news-content">
+                            {{ newsItem.content|raw }}
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <div>
+                                {% for tag in newsItem.tags %}
+                                    <a href="{{ path('app_news_tag', {slug: tag.slug}) }}" class="badge bg-dark me-1">{{ tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                            <div class="share-buttons">
+                                <span class="text-muted me-2">Share:</span>
+                                <a href="#" class="text-secondary me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-secondary me-2"><i class="fab fa-facebook"></i></a>
+                                <a href="#" class="text-secondary me-2"><i class="fab fa-reddit"></i></a>
+                                <a href="#" class="text-secondary"><i class="fas fa-link"></i></a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <hr class="my-5">
+
+                    <section class="comments">
+                        <h3 class="mb-4">Comments ({{ newsItem.comments|length }})</h3>
+
+                        {% if app.user %}
+                            <div class="card bg-secondary mb-4">
+                                <div class="card-body">
+                                    {{ form_start(commentForm) }}
+                                    {{ form_row(commentForm.content) }}
+                                    <button type="submit" class="btn btn-primary">Post Comment</button>
+                                    {{ form_end(commentForm) }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info mb-4">
+                                <a href="{{ path('app_login') }}" class="alert-link">Sign in</a> to leave a comment.
+                            </div>
+                        {% endif %}
+
+                        <div class="comments-list">
+                            {% for comment in newsItem.comments %}
+                                <div class="card bg-secondary mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex mb-3">
+                                            <img src="{{ asset('images/default-avatar.png') }}" class="rounded-circle me-2" width="40" alt="User">
+                                            <div>
+                                                <strong>{{ comment.user.username }}</strong>
+                                                <div class="text-muted small">{{ comment.createdAt|ago }}</div>
+                                            </div>
+                                        </div>
+                                        <p>{{ comment.content }}</p>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    No comments yet. Be the first to comment!
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card bg-secondary mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Related News</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                {% for relatedNews in relatedNewsItems %}
+                                    <a href="{{ path('app_news_show', {id: relatedNews.id, slug: relatedNews.slug}) }}" class="list-group-item list-group-item-action bg-transparent text-white">
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ asset('uploads/news/thumbs/' ~ relatedNews.image) }}" class="rounded me-3" width="60" alt="{{ relatedNews.title }}">
+                                            <div>
+                                                <h6 class="mb-1">{{ relatedNews.title }}</h6>
+                                                <small class="text-muted">{{ relatedNews.createdAt|date('M d, Y') }}</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-secondary">
+                        <div class="card-header">
+                            <h5 class="mb-0">Categories</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                {% for category in newsCategories %}
+                                    <a href="{{ path('app_news_category', {slug: category.slug}) }}" class="list-group-item list-group-item-action bg-transparent text-white d-flex justify-content-between align-items-center">
+                                        {{ category.name }}
+                                        <span class="badge bg-dark rounded-pill">{{ category.newsCount }}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
