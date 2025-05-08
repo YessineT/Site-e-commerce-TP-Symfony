@@ -23,12 +23,39 @@ final class GameCreationController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $game->setSubmittedBy($this->getUser());
-            $game->setStatus('pending_review');
+            if($game->getPrice() <= 0) {
+                $game->setPrice(0);
+                $game->setIsFree(true);
+            }
 
             $entityManager->persist($game);
             $entityManager->flush();
 
             $this->addFlash('success', 'Game created successfully.');
+            return $this->redirectToRoute('app_game_creation');
+        }
+        return $this->render('game_creation/index.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/game_creation/{id}', name: 'app_game_creation_edit')]
+    public function edit(Game $game, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(GameForm::class, $game)
+                    ->add('submit', SubmitType::class, []);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $game->setSubmittedBy($this->getUser());
+            if($game->getPrice() <= 0) {
+                $game->setPrice(0);
+                $game->setIsFree(true);
+            }
+
+            $entityManager->persist($game);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Game updated successfully.');
             return $this->redirectToRoute('app_game_creation');
         }
         return $this->render('game_creation/index.html.twig', [
