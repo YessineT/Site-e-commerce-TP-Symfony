@@ -545,10 +545,7 @@ class Game
         return $this;
     }
 
-    public function getSubmittedAt(): ?\DateTimeInterface
-    {
-        return $this->submittedAt;
-    }
+    
 
     public function setSubmittedAt(\DateTimeInterface $submittedAt): static
     {
@@ -557,10 +554,7 @@ class Game
         return $this;
     }
 
-    public function getSubmittedBy(): ?User
-    {
-        return $this->submittedBy;
-    }
+    
 
     public function setSubmittedBy(?User $submittedBy): static
     {
