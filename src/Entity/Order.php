@@ -2,77 +2,96 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OrderRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: "orders")] // Ensure this matches your database schema
+#[ORM\Table(name: '`order`')]
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'float')]
-    private float $totalAmount;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTime $orderDate = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $status;
+    #[ORM\Column]
+    private ?int $paymentId = null;
 
-    #[ORM\Column(type: 'date')]
-    private \DateTimeInterface $orderDate;
+    #[ORM\Column(length: 50)]
+    private ?string $status = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    #[ORM\Column]
+    private ?float $totalPrice = null;
+
+    #[ORM\Column]
+    private ?int $userId = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTotalAmount(): float
-    {
-        return $this->totalAmount;
-    }
-
-    public function setTotalAmount(float $totalAmount): self
-    {
-        $this->totalAmount = $totalAmount;
-        return $this;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
-        return $this;
-    }
-
-    public function getOrderDate(): \DateTimeInterface
+    public function getOrderDate(): ?\DateTime
     {
         return $this->orderDate;
     }
 
-    public function setOrderDate(\DateTimeInterface $orderDate): self
+    public function setOrderDate(\DateTime $orderDate): static
     {
         $this->orderDate = $orderDate;
+
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getPaymentId(): ?int
     {
-        return $this->user;
+        return $this->paymentId;
     }
 
-    public function setUser(?User $user): self
+    public function setPaymentId(int $paymentId): static
     {
-        $this->user = $user;
+        $this->paymentId = $paymentId;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTotalPrice(): ?float
+    {
+        return $this->totalPrice;
+    }
+
+    public function setTotalPrice(float $totalPrice): static
+    {
+        $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): static
+    {
+        $this->userId = $userId;
+
         return $this;
     }
 }
