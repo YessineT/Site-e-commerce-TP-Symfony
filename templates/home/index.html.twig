@@ -3,6 +3,10 @@
 
 {% block title %}GameHub - Discover Your Next Favorite Game{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+{% endblock %}
+
 {% block body %}
     <!-- Hero Section -->
     <section class="hero-section">
@@ -24,7 +28,7 @@
                 {% for game in featuredGames %}
                     <div class="col-md-4">
                         <div class="game-card">
-                            <img src="{{ asset('uploads/games/' ~ game.image) }}" alt="{{ game.title }} Cover">
+                            <img src="{{ asset('uploads/games/' ~ game.thumbnail) }}" class="img-fluid" alt="{{ game.title }} Cover">
                             <div class="game-card-body">
                                 <h5>{{ game.title }}</h5>
                                 <p class="text-secondary">{{ game.genre.name }}</p>
@@ -43,7 +47,7 @@
                                     </div>
                                     <span class="game-price">${{ game.price|number_format(2) }}</span>
                                 </div>
-                                <a href="{{ path('app_game_show', {id: game.id, slug: game.slug}) }}" class="stretched-link"></a>
+                                <a href="" class="stretched-link"></a>
                             </div>
                         </div>
                     </div>
@@ -52,48 +56,62 @@
         </div>
     </section>
 
-    <!-- Free Games Section -->
+    <!-- Limited time Free Games Section -->
     <section class="py-5 bg-dark">
         <div class="container">
             <h2 class="section-title">Free This Week</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card bg-transparent border-0">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="{{ asset('uploads/games/' ~ freeGame.image) }}" class="img-fluid rounded" alt="{{ freeGame.title }}">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h3 class="card-title">{{ freeGame.title }}</h3>
-                                    <p class="card-text">{{ freeGame.shortDescription }}</p>
-                                    <p class="card-text"><small class="text-secondary">Free until {{ freeGame.freeUntil|date('F j') }}</small></p>
-                                    <a href="{{ path('app_game_claim_free', {id: freeGame.id}) }}" class="btn btn-primary">Get It Now</a>
+            {% for freeGame in freeGamesLimited %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-transparent border-0">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="{{ asset('uploads/games/' ~ freeGame.thumbnail) }}" class="img-fluid rounded" alt="{{ freeGame.title }}">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h3 class="card-title">{{ freeGame.title }}</h3>
+                                        <p class="card-text">{{ freeGame.shortDescription }}</p>
+                                        <p class="card-text"><small class="text-secondary">Free until {{ freeGame.freeUntil|date('F j') }}</small></p>
+                                        <a href="" class="btn btn-primary">Get It Now</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card bg-transparent border-0">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="{{ asset('uploads/games/' ~ nextFreeGame.image) }}" class="img-fluid rounded" alt="{{ nextFreeGame.title }}">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h3 class="card-title">Next Week: {{ nextFreeGame.title }}</h3>
-                                    <p class="card-text">{{ nextFreeGame.shortDescription }}</p>
-                                    <p class="card-text"><small class="text-secondary">Coming {{ nextFreeGame.freeFrom|date('F j') }}</small></p>
-                                    <a href="{{ path('app_game_remind_me', {id: nextFreeGame.id}) }}" class="btn btn-outline-light">Remind Me</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
+
+    <!-- Free Games -->
+    <section class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="section-title">Free Games</h2>
+            {% for freeGame in freeGames %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card bg-transparent border-0">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="{{ asset('uploads/games/' ~ freeGame.thumbnail) }}" class="img-fluid rounded" alt="{{ freeGame.title }}">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h3 class="card-title">{{ freeGame.title }}</h3>
+                                        <p class="card-text">{{ freeGame.shortDescription }}</p>
+                                        <p class="card-text"><small class="text-secondary">Free until {{ freeGame.freeUntil|date('F j') }}</small></p>
+                                        <a href="" class="btn btn-primary">Get It Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
 
     <!-- News Section -->
     <section class="py-5">
@@ -103,14 +121,12 @@
                 {% for newsItem in latestNews %}
                     <div class="col-md-4 mb-4">
                         <div class="card bg-secondary border-0 h-100">
-                            <img src="{{ asset('uploads/news/' ~ newsItem.image) }}" class="card-img-top" alt="{{ newsItem.title }}">
+                            <img src="{{ asset('uploads/games/' ~ newsItem.thumbnail) }}" class="card-img-top" alt="{{ newsItem.title }}">
                             <div class="card-body">
                                 <h5 class="card-title">{{ newsItem.title }}</h5>
-                                <p class="card-text">{{ newsItem.summary }}</p>
                                 <a href="{{ path('app_news_show', {id: newsItem.id, slug: newsItem.slug}) }}" class="btn btn-sm btn-primary">Read More</a>
                             </div>
                             <div class="card-footer bg-transparent border-0">
-                                <small class="text-muted">Posted {{ newsItem.createdAt|ago }}</small>
                             </div>
                         </div>
                     </div>

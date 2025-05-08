@@ -22,7 +22,7 @@ class Game
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true, unique: true, options: [])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -34,13 +34,15 @@ class Game
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: [
+        'default' => 'CURRENT_TIMESTAMP'
+    ])]
     private ?\DateTimeInterface $releaseDate = null;
 
     #[ORM\Column]
     private bool $isFree = false;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $freeUntil = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -104,19 +106,6 @@ class Game
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
-
-    #[ORM\Column(length: 20)]
-    private string $status = 'draft'; // draft|pending_review|approved|rejected
-
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $submittedBy = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $submittedAt = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $rejectionReason = null;
 
     public function __construct()
     {
@@ -226,12 +215,12 @@ class Game
         return $this;
     }
 
-    public function getReleaseDate(): ?\DateTime
+    public function getReleaseDate(): \DateTimeInterface
     {
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(\DateTime $releaseDate): static
+    public function setReleaseDate(\DateTimeInterface $releaseDate): static
     {
         $this->releaseDate = $releaseDate;
 
@@ -250,12 +239,12 @@ class Game
         return $this;
     }
 
-    public function getFreeUntil(): ?\DateTime
+    public function getFreeUntil(): ?\DateTimeInterface
     {
         return $this->freeUntil;
     }
 
-    public function setFreeUntil(?\DateTime $freeUntil): static
+    public function setFreeUntil(?\DateTimeInterface $freeUntil): static
     {
         $this->freeUntil = $freeUntil;
 
@@ -394,12 +383,12 @@ class Game
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): static
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -556,38 +545,14 @@ class Game
         return $this;
     }
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getSubmittedAt(): ?\DateTime
+    public function getSubmittedAt(): ?\DateTimeInterface
     {
         return $this->submittedAt;
     }
 
-    public function setSubmittedAt(\DateTime $submittedAt): static
+    public function setSubmittedAt(\DateTimeInterface $submittedAt): static
     {
         $this->submittedAt = $submittedAt;
-
-        return $this;
-    }
-
-    public function getRejectionReason(): ?string
-    {
-        return $this->rejectionReason;
-    }
-
-    public function setRejectionReason(?string $rejectionReason): static
-    {
-        $this->rejectionReason = $rejectionReason;
 
         return $this;
     }
