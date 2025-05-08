@@ -16,59 +16,6 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-    public function findPopularGames(int $maxResults): array
-    {
-        return $this->createQueryBuilder('g')
-            ->leftJoin('g.downloads', 'd')
-            ->groupBy('g.id')
-            ->orderBy('COUNT(d.id)', 'DESC')
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findLatestGames(int $maxResults): array
-    {
-        return $this->createQueryBuilder('g')
-            ->orderBy('g.id', 'DESC')
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findFreeGames(int $maxResults): array
-    {
-        return $this->createQueryBuilder('g')
-            ->where('g.price = 0')
-            ->orderBy('g.releaseDate', 'DESC')
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findFreeUntilGames(int $maxResults): array
-    {
-        return $this->createQueryBuilder('g')
-            ->where('g.price <> 0 AND g.freeUntil >= :today')
-            ->setParameter('today', new \DateTime())
-            ->orderBy('g.releaseDate', 'DESC')
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function findGamesFromGenre(int $genreId, int $maxResults): array
-    {
-        return $this->createQueryBuilder('g')
-            ->leftJoin('g.genres', 'g')
-            ->where('g.id = :genreId')
-            ->setParameter('genreId', $genreId)
-            ->orderBy('g.id', 'DESC')
-            ->setMaxResults($maxResults)
-            ->getQuery()
-            ->getResult();
-    }
-
     //    /**
     //     * @return Game[] Returns an array of Game objects
     //     */

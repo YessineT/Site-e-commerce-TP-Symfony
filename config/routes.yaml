@@ -1,5 +1,29 @@
+# Default homepage route
+home:
+    path: /
+    controller: App\Controller\DefaultController::index
+
+# Example route for a product page
+product_show:
+    path: /product/{id}
+    controller: App\Controller\ProductController::show
+    requirements:
+        id: '\d+'
+
+# Example route for a contact page
+contact:
+    path: /contact
+    controller: App\Controller\ContactController::index
+
+# Example route for a dashboard
+dashboard:
+    path: /dashboard
+    controller: App\Controller\DashboardController::index
+
+# Import routes defined by attributes in controllers
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+    resource: '../src/Controller/'
     type: attribute
+app_signin:
+    path: /signup
+    controller: App\Controller\SignUpController::index
