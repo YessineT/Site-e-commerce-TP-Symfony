@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
+use App\Repository\CartRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-#[ORM\Entity]
+
+#[ORM\Entity(repositoryClass: CartRepository::class)]
 class Cart
 {
     #[ORM\Id]

@@ -31,6 +31,10 @@ class Download
     #[ORM\Column]
     private bool $isInstalled = false;
 
+    // Adding hoursPlayed property
+    #[ORM\Column(type: Types::FLOAT, nullable: true)]
+    private ?float $hoursPlayed = null;
+
     public function __construct()
     {
         $this->downloadedAt = new \DateTime();
@@ -97,6 +101,20 @@ class Download
     public function setGame(?Game $game): static
     {
         $this->game = $game;
+
+        return $this;
+    }
+
+    // Getter for hoursPlayed
+    public function getHoursPlayed(): ?float
+    {
+        return $this->hoursPlayed;
+    }
+
+    // Setter for hoursPlayed
+    public function setHoursPlayed(?float $hoursPlayed): static
+    {
+        $this->hoursPlayed = $hoursPlayed;
 
         return $this;
     }

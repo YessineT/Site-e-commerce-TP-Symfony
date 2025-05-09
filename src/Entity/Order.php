@@ -6,73 +6,86 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\OrderRepository;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: "orders")] // Ensure this matches your database schema
+#[ORM\Table(name: "orders")]
 class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(type: 'float')]
-    private float $totalAmount;
+    private ?float $totalPrice = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $status;
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
-    #[ORM\Column(type: 'date')]
-    private \DateTimeInterface $orderDate;
+    #[ORM\Column(type: 'datetime')]
+    private ?\DateTimeInterface $orderDate = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    #[ORM\Column]
+    private ?int $paymentId = null;
+
+    #[ORM\Column]
+    private ?int $userId = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTotalAmount(): float
+    public function getTotalPrice(): ?float
     {
-        return $this->totalAmount;
+        return $this->totalPrice;
     }
 
-    public function setTotalAmount(float $totalAmount): self
+    public function setTotalPrice(float $totalPrice): static
     {
-        $this->totalAmount = $totalAmount;
+        $this->totalPrice = $totalPrice;
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(string $status): static
     {
         $this->status = $status;
         return $this;
     }
 
-    public function getOrderDate(): \DateTimeInterface
+    public function getOrderDate(): ?\DateTimeInterface
     {
         return $this->orderDate;
     }
 
-    public function setOrderDate(\DateTimeInterface $orderDate): self
+    public function setOrderDate(\DateTimeInterface $orderDate): static
     {
         $this->orderDate = $orderDate;
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getPaymentId(): ?int
     {
-        return $this->user;
+        return $this->paymentId;
     }
 
-    public function setUser(?User $user): self
+    public function setPaymentId(int $paymentId): static
     {
-        $this->user = $user;
+        $this->paymentId = $paymentId;
+        return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): static
+    {
+        $this->userId = $userId;
         return $this;
     }
 }
