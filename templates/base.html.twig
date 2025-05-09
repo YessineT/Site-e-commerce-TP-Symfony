@@ -102,24 +102,25 @@
 {% block body %}{% endblock %}
 
 <!-- Footer -->
-<footer class="footer">
+<footer class="footer" style="background-color: #1a1a1a; color: white;">
     <div class="container">
         <div class="row">
             <div class="col-md-3 mb-4">
                 <h5>GameHub</h5>
                 <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="{{ path('app_about') }}" class="nav-link p-0 text-secondary">About Us</a></li>
-                    <li class="nav-item mb-2"><a href="{{ path('app_careers') }}" class="nav-link p-0 text-secondary">Careers</a></li>
-                    <li class="nav-item mb-2"><a href="{{ path('app_blog') }}" class="nav-link p-0 text-secondary">Blog</a></li>
+                    <li class="nav-item mb-2"><a href="{{ path('app_about') }}" class="nav-link p-0 text-light">About Us</a></li>
+                    <li class="nav-item mb-2"><a href="{{ path('app_careers') }}" class="nav-link p-0 text-light">Careers</a></li>
+                    <li class="nav-item mb-2"><a href="{{ path('app_blog') }}" class="nav-link p-0 text-light">Blog</a></li>
                 </ul>
             </div>
             <!-- ... (other footer columns) ... -->
         </div>
         <div class="border-top pt-4 mt-4 text-center">
-            <p class="text-secondary">© {{ "now"|date("Y") }} GameHub, Inc. All rights reserved.</p>
+            <p class="text-light">© {{ "now"|date("Y") }} GameHub, Inc. All rights reserved.</p>
         </div>
     </div>
 </footer>
+
 
 <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -8,18 +8,9 @@
   <style>
     .background-radial-gradient {
       background-color: hsl(168, 38.50%, 5.10%);
-      background-image: radial-gradient(650px circle at 0% 0%,
-          hsl(226, 40.50%, 14.50%) 15%,
-          hsl(218, 42.90%, 11.00%) 35%,
-          hsl(218, 41%, 10%) 75%,
-          hsl(218, 41%, 9%) 80%,
-          transparent 100%),
-        radial-gradient(1250px circle at 100% 100%,
-          hsl(217, 43.30%, 11.80%) 15%,
-          hsl(219, 40.60%, 12.50%) 35%,
-          hsl(219, 41.20%, 6.70%) 75%,
-          hsl(218, 41%, 9%) 80%,
-          transparent 100%);
+      background-image: radial-gradient(650px circle at 0% 0%, hsl(226, 40.50%, 14.50%) 15%, hsl(218, 42.90%, 11.00%) 35%, hsl(218, 41%, 10%) 75%, hsl(218, 41%, 9%) 80%, transparent 100%),
+        radial-gradient(1250px circle at 100% 100%, hsl(217, 43.30%, 11.80%) 15%, hsl(219, 40.60%, 12.50%) 35%, hsl(219, 41.20%, 6.70%) 75%, hsl(218, 41%, 9%) 80%, transparent 100%);
+      min-height: 100vh; /* Make sure the section covers the whole viewport */
     }
 
     #radius-shape-1 {
@@ -27,7 +18,7 @@
       width: 220px;
       top: -60px;
       left: -130px;
-      background: radial-gradient(HSL(250, 100%, 10%),rgb(250, 188, 1));
+      background: radial-gradient(HSL(250, 100%, 10%), rgb(250, 188, 1));
       overflow: hidden;
     }
 
@@ -37,7 +28,7 @@
       right: -110px;
       width: 300px;
       height: 300px;
-      background: radial-gradient(HSL(250, 100%, 10%),rgb(250, 188, 1));
+      background: radial-gradient(HSL(250, 100%, 10%), rgb(250, 188, 1));
       overflow: hidden;
     }
 
@@ -56,10 +47,7 @@
           <span style="color: hsl(218, 81%, 75%)">and join us in a seamless experience</span>
         </h1>
         <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-          Temporibus, expedita iusto veniam atque, magni tempora mollitia
-          dolorum consequatur nulla, neque debitis eos reprehenderit quasi
-          ab ipsum nisi dolorem modi. Quos?
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus, expedita iusto veniam atque, magni tempora mollitia dolorum consequatur nulla, neque debitis eos reprehenderit quasi ab ipsum nisi dolorem modi. Quos?
         </p>
       </div>
 
@@ -115,8 +103,7 @@
 
               <!-- Register buttons -->
               <div class="text-center mt-4">
-              <p class="mb-3 text-light">already have an account?  <a href="/login">   Log in</a></p>
-                
+                <p class="mb-3 text-light">Already have an account? <a href="/login">Log in</a></p>
               </div>
             </form>
           </div>
