@@ -72,24 +72,33 @@
 
         <div class="card bg-glass">
           <div class="card-body px-4 py-5 px-md-5">
-            <form>
+            <form method="post" action="{{ path('app_login') }}">
               <!-- 2 column grid layout with text inputs for the first and last names -->
-            
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %} 
+              <!-- CSRF token -->
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+              
               <!-- Email input -->
               <div class="form-group mb-4">
-                <label class="form-label mb-2 text-light" for="form3Example3">Email address</label>
-                <input type="email" id="form3Example3" class="form-control form-control-lg bg-dark text-light border-dark" />
+                <label class="form-label mb-2 text-light" for="inputEmail">Email address</label>
+                <input type="email" name="_username" id="inputEmail" value="{{ last_username }}" required autofocus
+                  class="form-control form-control-lg bg-dark text-light border-dark" />
+
               </div>
 
               <!-- Password input -->
               <div class="form-group mb-4">
-                <label class="form-label mb-2 text-light" for="form3Example4">Password</label>
-                <input type="password" id="form3Example4" class="form-control form-control-lg bg-dark text-light border-dark" />
+                <label class="form-label mb-2 text-light" for="inputPassword">Password</label>
+                <input type="password" name="_password" id="inputPassword" required class="form-control form-control-lg bg-dark text-light border-dark" />
               </div>
 
               <!-- Checkbox -->
               <div class="form-check d-flex justify-content-center mb-4">
-                <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
+                <input class="form-check-input me-2" type="checkbox" name="_remember_me" id="rememberMe" checked />
                 <label class="form-check-label text-light" for="form2Example33">
                   Remember me
                 </label>

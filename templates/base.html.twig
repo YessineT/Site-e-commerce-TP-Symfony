@@ -43,7 +43,7 @@
             padding: 0.5rem 1rem !important;
         }
 
-        .nav-link:hover {
+        .nav-link:hover{
             color: var(--accent-color) !important;
         }
 
@@ -87,9 +87,9 @@
                 </li>
             </ul>
             <div class="d-flex">
-                <a href="{{ path('app_search') }}" class="btn btn-outline-light me-2"><i class="fas fa-search"></i></a>
+                <!-- <a href="{{ path('app_search') }}" class="btn btn-outline-light me-2"><i class="fas fa-search"></i></a>app_account under this-->
                 {% if app.user %}
-                    <a href="{{ path('app_account') }}" class="btn btn-primary me-2">My Account</a>
+                  <a href="{{ path('app_logout') }}" class="btn btn-primary me-2">Logout</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="btn btn-primary me-2">Sign In</a>
                 {% endif %}
