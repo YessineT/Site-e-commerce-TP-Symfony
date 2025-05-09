@@ -1,0 +1,180 @@
+/* home.css */
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* Hero Section */
+body {
+    background-color: #1a1a1a; /* Dark background */
+    color: white; /* Light text color for contrast */
+}
+
+/* Dark background for Hero Section */
+.hero-section {
+    background-color: #1a1a1a; /* Dark background with opacity */
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+}
+
+/* Dark background for footer */
+footer {
+    background-color: #1a1a1a; /* Dark footer */
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+ 
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.hero-section .btn {
+    margin-right: 1rem;
+    padding: 10px 30px;
+    font-size: 1rem;
+    border-radius: 50px;
+}
+
+.hero-section .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.hero-section .btn-outline-light {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+/* Featured Games Section */
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.game-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.game-card img {
+    width: 100%;
+    height: auto;
+}
+
+.game-card-body {
+    padding: 1.5rem;
+}
+
+.game-card h5 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.game-card p {
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.game-card .rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-card .rating i {
+    margin: 0 2px;
+}
+
+.game-card .game-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Free Games Section */
+.bg-dark {
+    background-color: #343a40 !important;
+}
+
+.bg-dark .section-title {
+    color: #fff;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.card-text {
+    color: #ccc;
+}
+
+.card-footer {
+    background: none;
+}
+
+/* News Section */
+.card-img-top {
+    object-fit: cover;
+    height: 200px;
+}
+
+.card-body h5 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.card-body .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.card-body .btn:hover {
+    background-color: #0056b3;
+}
+
+.text-center a {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 50px;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    background-color: transparent;
+}
+
+.text-center a:hover {
+    background-color: #ffffff;
+    color: #333;
+    border-color: #007bff;
+}
