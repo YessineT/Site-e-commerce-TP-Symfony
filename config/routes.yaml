@@ -2,14 +2,17 @@
 home:
     path: /
     controller: App\Controller\DefaultController::index
-
+app_homepage:
+    path: /
+    controller: App\Controller\HomeController::index
 # Example route for a product page
 product_show:
     path: /product/{id}
     controller: App\Controller\ProductController::show
     requirements:
         id: '\d+'
-
+logout:
+    path: app_logout
 # Example route for a contact page
 contact:
     path: /contact
