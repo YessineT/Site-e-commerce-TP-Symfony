@@ -98,39 +98,28 @@
     border-color: #007bff;
 }
 
-/* Adjust navbar styles */
-.navbar {
-    background-color: var(--secondary-color) !important;
-    padding: 0.8rem 1rem;
-    position: relative; /* Ensure no conflicts with overlapping elements */
-    z-index: 10; /* Ensure navbar is above other content */
+.game-card {
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
 }
 
-.navbar-nav {
-    display: flex;
-    align-items: center;
+.game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-.navbar-toggler {
-    z-index: 2; /* Ensure it's above the navbar */
+.object-fit-cover {
+    object-fit: cover;
 }
 
-/* Ensure navbar items are aligned and not taking unnecessary space */
-.navbar .nav-item {
-    position: relative;
+.transition-all {
+    transition-property: all;
 }
 
-.navbar .nav-link {
-    color: var(--text-color) !important;
-    font-weight: 500;
-    padding: 0.5rem 1rem !important;
+.hover-shadow-lg:hover {
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
 }
 
-.navbar .nav-link:hover {
-    color: var(--accent-color) !important;
-}
-
-/* Additional fix for mouse hover */
-.navbar .nav-link:focus, .navbar .nav-link:hover {
-    text-decoration: none; /* Disable text decoration on hover/focus */
+.hover-transform-scale:hover {
+    transform: scale(1.03);
 }

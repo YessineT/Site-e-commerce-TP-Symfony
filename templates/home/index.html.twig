@@ -27,7 +27,7 @@
             <div class="row">
                 {% for game in featuredGames %}
                     <div class="col-md-4">
-                        <div class="game-card">
+                        <div class="game-card position-relative">
                             <img src="{{ asset('uploads/games/' ~ game.thumbnail) }}" class="img-fluid" alt="{{ game.title }} Cover">
                             <div class="game-card-body">
                                 <h5 class="text-black-50">{{ game.title }}</h5>
