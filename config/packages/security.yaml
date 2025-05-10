@@ -17,13 +17,18 @@ security:
             security: false
 
         main:
+#            #just to test the cart twig [before authentification---public access]
+#            pattern: ^/(?!cart).*$
+#            stateless: false
+#            # ----
             lazy: true
+#            anonymous: lazy
             provider: app_user_provider
             form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
-                default_target_path: app_homepage  # Change if you want
+                 login_path: app_login
+                 check_path: app_login
+                 enable_csrf: true
+                 default_target_path: app_homepage  # Change if you want
             logout:
                 path: app_logout
                 target: app_login
@@ -34,8 +39,11 @@ security:
                 always_remember_me: false
 
     access_control:
+        - { path: ^/cart, roles: ROLE_USER }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/signup, roles: PUBLIC_ACCESS }
         - { path: ^/home, roles: PUBLIC_ACCESS }    
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] }
+
+

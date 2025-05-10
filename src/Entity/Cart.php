@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\Collection;
 use App\Repository\CartRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Game;
 
 #[ORM\Entity(repositoryClass: CartRepository::class)]
 class Cart
@@ -30,6 +32,7 @@ class Cart
     {
         $this->userId = $userId;
         $this->createdAt = new \DateTime();
+        $this->games = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,4 +77,34 @@ class Cart
     {
         $this->updatedAt = new \DateTime();
     }
+
+    /**
+     * @return Collection<int, Game>
+     */
+    public function getGames(): Collection
+    {
+        return $this->games;
+    }
+
+    public function addGame(Game $game): static
+    {
+        if (!$this->games->contains($game)) {
+            $this->games[] = $game;
+            $game->setCart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGame(Game $game): static
+    {
+        if ($this->games->removeElement($game)) {
+            if ($game->getCart() === $this) {
+                $game->setCart(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

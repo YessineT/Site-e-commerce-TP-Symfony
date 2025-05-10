@@ -1,60 +1,101 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}My Cart{% endblock %}
 
 {% block body %}
-    <style>
-        table {
-            width: 80%;
-            margin: 1em auto;
-            border-collapse: collapse;
-        }
+    <div class="container my-5">
+        <h1 class="mb-4">Your Cart</h1>
 
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4>
+                Total Cart :
+                <span id="cart-total" class="badge bg-primary fs-5">
+          {{ total|number_format(2, '.', ',') }} €
+        </span>
+            </h4>
+        </div>
 
-        th {
-            background-color: #f2f2f2;
-            color: #333;
-        }
+        {# CSS corbeille #}
+        <style>
+            .trash-icon {
+                width: 1.5rem;
+                height: 1.5rem;
+                fill: #dc3545;
+                opacity: 0.4;
+                transition: opacity 0.2s;
+                cursor: pointer;
+            }
+            .trash-icon:hover {
+                opacity: 1;
+            }
+        </style>
 
-        a.remove:hover {
-            color: red;
-        }
-    </style>
+        <div class="row">
+            {% for item in items %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        {% if item.game.thumbnail is defined %}
+                            <img
+                                    src="{{ asset('uploads/games/' ~ item.game.thumbnail) }}"
+                                    class="card-img-top"
+                                    alt="{{ item.game.title }}"
+                            >
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ item.game.title }}</h5>
+                            <p class="card-text mb-2">
+                                unit price :
+                                <span class="unit-price">{{ item.game.price|number_format(2, '.', ',') }}</span> €
+                            </p>
 
-    <h2 style="text-align: center;">🛒 My Cart</h2>
+                            <form
+                                    action="{{ path('cart_update', {id: item.id}) }}"
+                                    method="post"
+                                    class="d-flex mb-3"
+                                    onchange="this.submit()"
+                            >
+                                <input
+                                        type="number"
+                                        name="quantity"
+                                        value="{{ item.quantity }}"
+                                        min="1"
+                                        class="form-control"
+                                        style="width: 5rem;"
+                                >
+                            </form>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for item in items %}
-            <tr>
-                <td>{{ item.game.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ (item.game.price * item.quantity)|number_format(2, '.', ',') }} €</td>
-                <td>
-                    <a href="{{ path('product_detail', { id: item.game.id }) }}">🔍</a>
-                    <a href="{{ path('cart_remove', { id: item.id }) }}" class="remove" style="color: grey;">🗑️</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">Your cart is empty.</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                            <p class="item-total mt-auto mb-3">
+                                Total : <span>{{ (item.quantity * item.game.price)|number_format(2, '.', ',') }}</span> €
+                            </p>
 
-    <h3 style="text-align: center;">Total: {{ total|number_format(2, '.', ',') }} €</h3>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a
+                                        href="#"
+                                        class="btn btn-sm btn-primary flex-fill me-2"
+                                >
+                                    Details
+                                </a>
+                                {# corbeille #}
+                                <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 16 16"
+                                        class="trash-icon"
+                                        title="Supprimer du panier"
+                                        onclick="window.location='{{ path('cart_remove', {id: item.id}) }}';"
+                                >
+                                    <path d="M5.5 5.5A.5.5 0 016 5h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 010-2H5V1.5A1.5 1.5 0 016.5 0h3A1.5 1.5 0 0111 1.5V2h3a1 1 0 011 1zm-3 0V1.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V3h4zM4 4v9a1 1 0 001 1h6a1 1 0 001-1V4H4z"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center fs-5 text-muted">Your cart is empty.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
