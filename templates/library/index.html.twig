@@ -25,12 +25,23 @@
                 {% for game in libraryGames %}
                     <div class="col-md-4 mb-4">
                         <div class="card game-card h-100">
-                            <img src="{{ asset('uploads/games/' ~ game.thumbnail) }}" class="card-img-top" alt="{{ game.title }}">
+                            <img src="{{ asset('uploads/games/' ~ game.game.thumbnail) }}" class="card-img-top" alt="{{ game.game.title }}">
                             <div class="card-body">
-                                <h5 class="card-title">{{ game.title }}</h5>
-                                <p class="card-text text-secondary">{{ game.genre.name }}</p>
-                                <p class="card-text">{{ game.shortDescription|length > 100 ? game.shortDescription|slice(0, 100) ~ '...' : game.shortDescription }}</p>
-                                <a href="{{ path('app_game_play', { id: game.id }) }}" class="btn btn-sm btn-success">Play Now</a>
+                               <h5 class="card-title text-uppercase fw-bold mb-2">{{ game.game.title }}</h5>
+                                <h6 class="card-subtitle text-muted mb-3">{{ game.game.genre.name }}</h6>
+
+                                <p class="card-text mb-3">
+                                    {{ game.game.shortDescription|length > 120 ? game.game.shortDescription|slice(0, 120) ~ '...' : game.game.shortDescription }}
+                                </p>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="mb-0"><strong>Hours Played:</strong> {{ game.hoursPlayed }} hrs</p>
+                                    </div>
+                                    <div>
+                                       <button class="btn btn-success btn-sm" disabled>Play</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
