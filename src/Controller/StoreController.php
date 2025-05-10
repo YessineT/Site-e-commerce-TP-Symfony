@@ -34,15 +34,10 @@ final class StoreController extends AbstractController
         }
 
         // Get games sorted according to selection
-        $games = $gameRepository->findBySortOption($sort);
-
-        $form = $this->createFormBuilder(GameFilterForm::class);
+        $games = $gameRepository->findAll();
 
         return $this->render('store/index.html.twig', [
             'games' => $games,
-            'sortOptions' => $sortOptions,
-            'currentSort' => $sort,
-            'filterForm' => $form->getForm()->createView(),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\CartRepository;
 use Doctrine\DBAL\Types\Types;
@@ -30,6 +31,7 @@ class Cart
     {
         $this->userId = $userId;
         $this->createdAt = new \DateTime();
+        $this->games = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,5 +75,35 @@ class Cart
     public function updateTimestamp(): void
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @return Collection<int, Game>
+     */
+    public function getGames(): Collection
+    {
+        return $this->games;
+    }
+
+    public function addGame(Game $game): static
+    {
+        if (!$this->games->contains($game)) {
+            $this->games->add($game);
+            $game->setCart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGame(Game $game): static
+    {
+        if ($this->games->removeElement($game)) {
+            // set the owning side to null (unless already changed)
+            if ($game->getCart() === $this) {
+                $game->setCart(null);
+            }
+        }
+
+        return $this;
     }
 }

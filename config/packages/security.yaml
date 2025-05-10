@@ -40,4 +40,5 @@ security:
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/game_creation, roles: PUBLIC_ACCESS}
         - { path: ^/store, roles: PUBLIC_ACCESS}
+        - { path: ^/library, roles: PUBLIC_ACCESS}
         - { path: ^/, roles: [ROLE_USER, ROLE_ADMIN] }
