@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\CartRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Game;
 
 #[ORM\Entity(repositoryClass: CartRepository::class)]
 class Cart
@@ -88,7 +89,7 @@ class Cart
     public function addGame(Game $game): static
     {
         if (!$this->games->contains($game)) {
-            $this->games->add($game);
+            $this->games[] = $game;
             $game->setCart($this);
         }
 
@@ -98,7 +99,6 @@ class Cart
     public function removeGame(Game $game): static
     {
         if ($this->games->removeElement($game)) {
-            // set the owning side to null (unless already changed)
             if ($game->getCart() === $this) {
                 $game->setCart(null);
             }
@@ -106,4 +106,5 @@ class Cart
 
         return $this;
     }
+
 }

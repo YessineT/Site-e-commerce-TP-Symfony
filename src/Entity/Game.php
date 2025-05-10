@@ -14,6 +14,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 class Game
 {
+    #[ORM\ManyToOne(inversedBy: 'games')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Cart $cart = null;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -560,6 +563,16 @@ class Game
     {
         $this->submittedBy = $submittedBy;
 
+        return $this;
+    }
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): static
+    {
+        $this->cart = $cart;
         return $this;
     }
 }
