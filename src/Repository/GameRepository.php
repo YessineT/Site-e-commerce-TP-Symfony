@@ -97,6 +97,18 @@ class GameRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findPaginated(int $page, int $limit)
+    {
+        return $this->createQueryBuilder('g')
+            ->leftJoin('g.genre', 'genre')
+            ->addSelect('genre')
+            ->orderBy('g.releaseDate', 'DESC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Game[] Returns an array of Game objects
     //     */

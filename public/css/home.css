@@ -179,3 +179,40 @@ footer {
     border-color: #007bff;
 }
 
+.card-img-top-container {
+    height: 200px; /* Fixed height */
+    display: flex;
+    align-items: center; /* Vertically centers the image */
+    justify-content: center; /* Horizontally centers the image */
+    overflow: hidden; /* Prevents overflow */
+    background: #f5f5f5; /* Fallback background */
+    transition: all 0.3s ease; /* Smooth hover effect */
+}
+
+/* Default state (scaled to fit) */
+.scalable-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Ensures full image is visible (no crop) */
+    transition: transform 0.3s ease;
+}
+
+/* Hover state (zooms slightly) */
+.game-card:hover .scalable-image {
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* If the image is too tall, show full image on hover */
+.game-card:hover .card-img-top-container {
+    overflow: visible;
+    z-index: 100; /* Ensures the expanded image appears above other elements */
+    background: white; /* Optional: improves visibility */
+}
+
+.game-card:hover, .card:hover {
+    transform: translateY(-10px);
+    transition: all 0.5s ease-out;
+}
+
