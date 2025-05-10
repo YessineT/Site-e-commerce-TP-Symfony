@@ -32,8 +32,8 @@ class Download
     private bool $isInstalled = false;
 
     // Adding hoursPlayed property
-    #[ORM\Column(type: Types::FLOAT, nullable: true)]
-    private ?float $hoursPlayed = null;
+    #[ORM\Column(type: Types::FLOAT, nullable: false)]
+    private ?float $hoursPlayed = 0;
 
     public function __construct()
     {

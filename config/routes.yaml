@@ -30,3 +30,7 @@ controllers:
 app_signin:
     path: /signup
     controller: App\Controller\SignUpController::index
+#Route for the library Page
+library:
+    path: /library
+    controller: App\Controller\LibraryController::index
