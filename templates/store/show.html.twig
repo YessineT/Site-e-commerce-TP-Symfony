@@ -1,0 +1,124 @@
+{# templates/home/index.html.twig #}
+{% extends '../../base.html.twig' %}
+
+{% block title %}GameHub - Discover Your Next Favorite Game{% endblock %}
+
+{% block body %}
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-content">
+            <h1 class="display-4 fw-bold mb-4">Discover Your Next Favorite Game</h1>
+            <p class="lead mb-4">Join millions of players and explore our vast collection of premium and free-to-play games.</p>
+            <div class="d-flex gap-3">
+                <a href="{{ path('app_store') }}" class="btn btn-primary btn-lg">Browse Store</a>
+                <a href="{{ path('app_about') }}" class="btn btn-outline-light btn-lg">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Games -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title">Featured Games</h2>
+            <div class="row">
+                {% for game in featuredGames %}
+                    <div class="col-md-4">
+                        <div class="game-card">
+                            <img src="{{ asset('uploads/games/' ~ game.image) }}" alt="{{ game.title }} Cover">
+                            <div class="game-card-body">
+                                <h5>{{ game.title }}</h5>
+                                <p class="text-secondary">{{ game.genre.name }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="rating">
+                                        {% for i in 1..5 %}
+                                            {% if i <= game.averageRating|round %}
+                                                <i class="fas fa-star text-warning"></i>
+                                            {% elseif i == game.averageRating|round(0, 'ceil') and game.averageRating|round != game.averageRating %}
+                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                            {% else %}
+                                                <i class="far fa-star text-warning"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <span class="ms-1">{{ game.averageRating|number_format(1) }}</span>
+                                    </div>
+                                    <span class="game-price">${{ game.price|number_format(2) }}</span>
+                                </div>
+                                <a href="{{ path('app_game_show', {id: game.id, slug: game.slug}) }}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Games Section -->
+    <section class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="section-title">Free This Week</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card bg-transparent border-0">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="{{ asset('uploads/games/' ~ freeGame.image) }}" class="img-fluid rounded" alt="{{ freeGame.title }}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h3 class="card-title">{{ freeGame.title }}</h3>
+                                    <p class="card-text">{{ freeGame.shortDescription }}</p>
+                                    <p class="card-text"><small class="text-secondary">Free until {{ freeGame.freeUntil|date('F j') }}</small></p>
+                                    <a href="{{ path('app_game_claim_free', {id: freeGame.id}) }}" class="btn btn-primary">Get It Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-transparent border-0">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="{{ asset('uploads/games/' ~ nextFreeGame.image) }}" class="img-fluid rounded" alt="{{ nextFreeGame.title }}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h3 class="card-title">Next Week: {{ nextFreeGame.title }}</h3>
+                                    <p class="card-text">{{ nextFreeGame.shortDescription }}</p>
+                                    <p class="card-text"><small class="text-secondary">Coming {{ nextFreeGame.freeFrom|date('F j') }}</small></p>
+                                    <a href="{{ path('app_game_remind_me', {id: nextFreeGame.id}) }}" class="btn btn-outline-light">Remind Me</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title">Latest News</h2>
+            <div class="row">
+                {% for newsItem in latestNews %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-secondary border-0 h-100">
+                            <img src="{{ asset('uploads/news/' ~ newsItem.image) }}" class="card-img-top" alt="{{ newsItem.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ newsItem.title }}</h5>
+                                <p class="card-text">{{ newsItem.summary }}</p>
+                                <a href="{{ path('app_news_show', {id: newsItem.id, slug: newsItem.slug}) }}" class="btn btn-sm btn-primary">Read More</a>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <small class="text-muted">Posted {{ newsItem.createdAt|ago }}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4">
+                <a href="{{ path('app_news') }}" class="btn btn-outline-light">View All News</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

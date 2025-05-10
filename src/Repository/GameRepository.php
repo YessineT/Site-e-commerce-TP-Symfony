@@ -69,6 +69,34 @@ class GameRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    // src/Repository/GameRepository.php
+
+    public function findBySortOption(string $sortOption): array
+    {
+        $qb = $this->createQueryBuilder('g');
+
+        switch ($sortOption) {
+            case 'newest':
+                $qb->orderBy('g.releaseDate', 'DESC');
+                break;
+            case 'price_asc':
+                $qb->orderBy('g.price', 'ASC');
+                break;
+            case 'price_desc':
+                $qb->orderBy('g.price', 'DESC');
+                break;
+            case 'rating':
+                $qb->orderBy('g.averageRating', 'DESC');
+                break;
+            case 'popular':
+            default:
+                $qb->orderBy('g.price', 'DESC');
+                break;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Game[] Returns an array of Game objects
     //     */
