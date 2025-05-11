@@ -16,10 +16,6 @@
     background-color: #f8f9fa;
 }
 
-.btn-success {
-    font-size: 0.9rem;
-    padding: 5px 10px;
-}
 .card-title {
     font-size: 1.2rem;
     letter-spacing: 1px;
@@ -40,10 +36,30 @@
     margin-top: 10px;
 }
 
-.btn-success {
+.btn-success,
+.btn-outline-primary {
     font-size: 0.875rem;
     padding: 6px 12px;
     text-transform: uppercase;
+    font: Helvetica;
+}
+
+.btn-success {
     background-color: #28a745;
     border-color: #28a745;
+    color: white;
+}
+
+.btn-outline-primary {
+    color: #007bff;
+    background-color: transparent;
+    border: 1px solid #007bff;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
 }
