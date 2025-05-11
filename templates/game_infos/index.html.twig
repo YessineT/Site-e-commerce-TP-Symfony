@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ game.title }} - Game Details{% endblock %}
+
+{% block body %}
+    <style>
+        /* Custom styles to complement Bootstrap */
+        .game-hero {
+            position: relative;
+            min-height: 400px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url("{{ asset('uploads/games/' ~ game.thumbnail) }}") no-repeat center center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .game-content {
+            background-color: rgba(255, 255, 255, 0.65); /* Slightly more opaque */
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .game-thumbnail {
+            width: 100%; /* Ensure full width of container */
+            height: auto;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .game-meta {
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+        }
+        
+        .game-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #28a745;
+        }
+        
+        .specs-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .specs-list li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .specs-list strong {
+            color: var(--primary-color);
+        }
+        
+        /* Ensure content doesn't overlap with footer */
+        main {
+            flex: 1;
+            padding-bottom: 2rem;
+        }
+        
+        /* New styles for the changes */
+        .thumbnail-price-container {
+            width: 100%;
+        }
+        
+        .price-card {
+            background-color: rgba(255, 255, 255, 0.95); /* More transparent */
+            border: none;
+        }
+        
+        .price-card .card-body {
+            color: #495057; /* Dark grey text */
+        }
+        
+        .price-card .btn {
+            color: white; /* Keep button text white */
+        }
+    </style>
+
+    <main>
+        <!-- Hero Section with Background Image -->
+        <section class="game-hero py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="text-white display-4 fw-bold">{{ game.title }}</h1>
+                        <p class="text-white-50">{{ game.shortDescription }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Section -->
+        <section class="container mb-5">
+            <div class="row">
+                <!-- Game Thumbnail and Price Column -->
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="thumbnail-price-container">
+                        {% if game.thumbnail %}
+                            <img src="{{ asset('uploads/games/' ~ game.thumbnail) }}" 
+                                 alt="{{ game.title }}" 
+                                 class="img-fluid game-thumbnail mb-4"> <!-- Added mb-4 for spacing -->
+                        {% else %}
+                            <div class="bg-secondary text-white p-5 text-center rounded mb-4">
+                                <i class="fas fa-gamepad fa-5x"></i>
+                                <p class="mt-3">No image available</p>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Price Box -->
+                        <div class="card price-card mt-0"> <!-- Removed mt-4 since we have mb-4 above -->
+                            <div class="card-body text-center">
+                                <h3 class="game-price">${{ game.price|number_format(2) }}</h3>
+                                <button class="btn btn-primary btn-lg w-100 mt-3">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game Details Column -->
+                <div class="col-lg-8">
+                    <div class="game-content">
+                        <h2 class="game-title">About This Game</h2>
+                        <p class="game-meta">
+                            <span class="me-3"><i class="fas fa-calendar-alt me-1"></i> Released: {{ game.releaseDate|date('F j, Y') }}</span>
+                            <span><i class="fas fa-tags me-1"></i> Genre: {{ game.genre.name }}</span>
+                        </p>
+                        
+                        <div class="mb-4">
+                            <h3 class="h4">Description</h3>
+                            <p>{{ game.description }}</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h3 class="h4">System Requirements</h3>
+                            <ul class="specs-list">
+                                <li><strong>OS:</strong> {{ game.minOs }}</li>
+                                <li><strong>Processor:</strong> {{ game.minProcessor }}</li>
+                                <li><strong>Memory:</strong> {{ game.minMemory }}</li>
+                                <li><strong>Graphics:</strong> {{ game.minGraphics }}</li>
+                                <li><strong>Storage:</strong> {{ game.minStorage }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
