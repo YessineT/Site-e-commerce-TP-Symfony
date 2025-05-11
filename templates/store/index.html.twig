@@ -10,49 +10,60 @@
 {% block body %}
     <section class="py-5 bg-dark">
         <div class="container px-4">
-            <div class="row g-4">
-                {% for game in games %}
-                    <div class="col-lg-4 col-md-6">
-                        <div class="game-card card h-100 border-0 shadow-sm overflow-hidden transition-all hover-shadow-lg hover-transform-scale">
-                            <div class="position-relative overflow-hidden" style="height: 200px;">
-                                <img src="{{ asset('uploads/games/' ~ game.thumbnail) }}"
-                                     class="img-fluid w-100 h-100 object-fit-cover"
-                                     alt="{{ game.title }} Cover"
-                                     loading="lazy">
-                                <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
-                                    <h5 class="text-white mb-0">{{ game.title }}</h5>
-                                    <span class="badge bg-primary">{{ game.genre.name }}</span>
-                                </div>
-                            </div>
-
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="rating">
-                                        {% for i in 1..5 %}
-                                            {% if i <= game.averageRating|round %}
-                                                <i class="fas fa-star text-warning"></i>
-                                            {% elseif i == game.averageRating|round(0, 'ceil') and game.averageRating|round != game.averageRating %}
-                                                <i class="fas fa-star-half-alt text-warning"></i>
-                                            {% else %}
-                                                <i class="far fa-star text-warning"></i>
-                                            {% endif %}
-                                        {% endfor %}
-                                        <span class="ms-1 text-muted">{{ game.averageRating|number_format(1) }}</span>
-                                    </div>
-                                    <span class="h5 text-dark mb-0">${{ game.price|number_format(2) }}</span>
-                                </div>
-
-                                <div class="d-grid">
-                                    <a href="?name={{ game.title }}" class="btn btn-outline-primary stretched-link">
-                                        View Details <i class="fas fa-arrow-right ms-2"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+            <div class="row g-4" id="games-container">
+                {% include 'store/nextPage.html.twig' %}
+            </div>
+            <div id="loading-spinner" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div id="end-of-results" class="text-center py-4 text-muted text-white-50" style="display: none;">
+                No more games to load
             </div>
         </div>
     </section>
-    <script src="{{ asset('js/store.js') }}"></script</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let nextPage = {{ nextPage }};
+            const maxPage = {{ maxPage }};
+            let isLoading = false;
+
+            window.addEventListener('scroll', function() {
+                if (isLoading || nextPage > maxPage) return;
+
+                // Check if we're near the bottom of the page
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                    loadMoreGames();
+                }
+            });
+
+            function loadMoreGames() {
+                isLoading = true;
+                document.getElementById('loading-spinner').style.display = 'block';
+
+                fetch(`/store?page=${nextPage}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.html) {
+                            document.getElementById('games-container').insertAdjacentHTML('beforeend', data.html);
+                            nextPage = data.nextPage;
+
+                            if (nextPage > data.maxPage) {
+                                document.getElementById('end-of-results').style.display = 'block';
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        isLoading = false;
+                        document.getElementById('loading-spinner').style.display = 'none';
+                    });
+            }
+        });
+    </script>
 {% endblock %}
