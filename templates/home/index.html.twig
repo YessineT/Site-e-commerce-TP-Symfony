@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="#" class="stretched-link"></a>
+                            <a href="{{ path('app_game_about', {'id': game.id}) }}" class="stretched-link"></a>
                         </div>
                     </div>
                 {% endfor %}
@@ -79,7 +79,7 @@
                                         <h3 class="card-title">{{ freeGame.title }}</h3>
                                         <p class="card-text">{{ freeGame.shortDescription }}</p>
                                         <p class="card-text"><small class="text-secondary">Free until {{ freeGame.freeUntil|date('F j') }}</small></p>
-                                        <a href="" class="btn btn-primary">Get It Now</a>
+                                        <a href="{{ path('app_game_about', {'id': freeGame.id}) }}" class="btn btn-primary">Get It Now</a>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                                         <h3 class="card-title">{{ freeGame.title }}</h3>
                                         <p class="card-text text-black-50">{{ freeGame.shortDescription }}</p>
                                         <p class="card-text"><small class="text-secondary">Free until {{ freeGame.freeUntil|date('F j') }}</small></p>
-                                        <a href="" class="btn btn-primary">Get It Now</a>
+                                        <a href="{{ path('app_game_about', {'id': freeGame.id}) }}" class="btn btn-primary">Get It Now</a>
                                     </div>
                                 </div>
                             </div>
