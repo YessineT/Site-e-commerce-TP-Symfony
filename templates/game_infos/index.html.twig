@@ -84,6 +84,23 @@
         .price-card .btn {
             color: white; /* Keep button text white */
         }
+
+        .rating-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rating-input .form-range {
+            flex: 1;
+        }
+
+        .rating-input output {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+            color: #495057;
+        }
     </style>
 
     <main>
@@ -153,6 +170,111 @@
                                 <li><strong>Graphics:</strong> {{ game.minGraphics }}</li>
                                 <li><strong>Storage:</strong> {{ game.minStorage }}</li>
                             </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section>
+            <div class="container bg-dark rounded p-4 mb-4 shadow">
+                <!-- Reviews List -->
+                {% for review in reviews %}
+                    <div class="card mb-4 border-0 shadow-sm bg-gray-800">
+                        <div class="card-body rounded">
+                            <div class="d-flex align-items-start">
+                                <!-- Avatar -->
+                                <div class="me-3">
+                                    {% if review.user.avatar %}
+                                        <img src="{{ review.user.avatar }}" alt="{{ review.user.username }}" class="rounded-circle" width="48" height="48">
+                                    {% else %}
+                                        <div class="bg-primary text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <h5 class="card-title text-dark mb-0">{{ review.user.username }}</h5>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary">
+                                    {{ review.rating|round(1) }} <i class="fas fa-star"></i>
+                                </span>
+                                    </div>
+
+                                    <!-- Star Rating -->
+                                    <div class="mb-2">
+                                        {% for i in 1..5 %}
+                                            {% if i <= review.rating|round %}
+                                                <i class="fas fa-star text-warning"></i>
+                                            {% elseif i == review.rating|round(0, 'ceil') and review.rating|round != review.rating %}
+                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                            {% else %}
+                                                <i class="far fa-star text-warning"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                    <p class="card-text text-white-80">{{ review.comment }}</p>
+                                    <p class="card-text mb-0">
+                                        <small class="text-muted">{{ review.createdAt|date('F j, Y') }}</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Empty State -->
+                {% if reviews|length == 0 %}
+                    <div class="alert alert-dark border border-secondary text-center py-4" role="alert">
+                        <i class="far fa-comments fa-2x text-primary mb-3"></i>
+                        <h4 class="text-white">No reviews yet</h4>
+                        <p class="mb-0 text-white-60">Be the first to review this game!</p>
+                    </div>
+                {% endif %}
+
+                <!-- Review Form -->
+                <div class="container mt-5">
+                    <div class="row bg-gray-800 rounded p-4 shadow-sm border border-secondary">
+                        <div class="col-md-3">
+                            <h2 class="h4 text-white mb-3">Leave a Review</h2>
+                            <p class="text-white-60 small">Share your experience with others</p>
+                        </div>
+
+                        <div class="col-md-9">
+                            {{ form_start(form) }}
+                            <!-- Rating Field -->
+                            <div class="col-md-12 mb-4">
+                                <div class="form-group">
+                                    {{ form_label(form.rating, null, {'label_attr': {'class': 'form-label text-white'}}) }}
+                                    <div class="rating-input">
+                                        {{ form_widget(form.rating, { 'attr': { 'class': 'form-range' } }) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comment Field -->
+                            <div class="col-md-12 mb-4">
+                                <div class="form-group">
+                                    <label class="form-label text-white required" for="comment">Your comment:</label>
+                                    <textarea id="comment" name="comment" required="required" class="form-control bg-gray-700 border-secondary text-black" rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-md-12">
+                                <div class="form-group d-flex justify-content-end">
+                                    {{ form_widget(form.submit, {
+                                        'attr': {
+                                            'class': 'btn btn-primary px-4 py-2 fw-bold'
+                                        },
+                                        'label': 'Submit Review'
+                                    }) }}
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
                         </div>
                     </div>
                 </div>
