@@ -2,35 +2,45 @@
 {% block title %}My Cart{% endblock %}
 
 {% block body %}
-    <section class="py-5 bg-dark text-white">
-        <div class="container">
-            <h1 class="display-5 fw-bold mb-4">Your Cart</h1>
-            <p class="lead">Review the items in your cart before proceeding to checkout.</p>
-        </div>
-    </section>
     <div class="container my-5">
+        <h1 class="mb-4">Your Cart</h1>
+        <p class="lead">Review the items in your cart before proceeding to checkout.</p>
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4>
-                Total Cart :
+                Total:
                 <span id="cart-total" class="badge bg-primary fs-5">
                     {{ total|number_format(2, '.', ',') }} €
                 </span>
             </h4>
         </div>
 
-        {# CSS corbeille #}
         <style>
-            .trash-icon {
+            .trash-icon, .send-icon {
                 width: 1.5rem;
                 height: 1.5rem;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            .trash-icon {
                 fill: #dc3545;
                 opacity: 0.4;
-                transition: opacity 0.2s;
-                cursor: pointer;
             }
-            .trash-icon:hover {
+            .trash-icon:hover { opacity: 1; }
+            .send-icon {
+                fill: #28a745;
+                opacity: 0.7;
+                margin-left: 0.5rem;
+            }
+            .send-icon:hover {
                 opacity: 1;
+                transform: translateX(2px);
             }
+            .gift-input {
+                width: 12rem;
+                transition: opacity 0.3s;
+            }
+            .hidden { display: none !important; }
         </style>
 
         <div class="row">
@@ -46,60 +56,98 @@
                         {% endif %}
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ item.game.title }}</h5>
-                            <p class="card-text mb-2">
-                                unit price :
-                                <span class="unit-price">{{ item.game.price|number_format(2, '.', ',') }}</span> €
+                            <p class="card-text mb-3">
+                                Price : {{ item.game.price|number_format(2, '.', ',') }} €
                             </p>
 
-                            <form
-                                    action="{{ path('cart_update', {id: item.id}) }}"
-                                    method="post"
-                                    class="d-flex mb-3"
-                                    onchange="this.submit()"
-                            >
-                                <input
-                                        type="number"
-                                        name="quantity"
-                                        value="{{ item.quantity }}"
-                                        min="1"
-                                        class="form-control"
-                                        style="width: 5rem;"
+                            <div class="mt-auto">
+                                {# offrir --when click #}
+                                <button
+                                        type="button"
+                                        class="btn btn-outline-success gift-btn"
+                                        data-item-id="{{ item.id }}"
+                                        onclick="toggleGiftForm(this)"
                                 >
-                            </form>
+                                    Make a gift
+                                </button>
 
-                            <p class="item-total mt-auto mb-3">
-                                Total : <span>{{ (item.quantity * item.game.price)|number_format(2, '.', ',') }}</span> €
-                            </p>
+                                {# zone texte +icon envoyer #}
+                                <div
+                                        id="gift-group-{{ item.id }}"
+                                        class="d-flex align-items-center mt-2 hidden"
+                                >
+                                    <input
+                                            type="text"
+                                            placeholder="User Name"
+                                            class="form-control gift-input"
+                                            id="gift-input-{{ item.id }}"
+                                    >
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            class="send-icon"
+                                            onclick="submitGift({{ item.id }})"
+                                    >
+                                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                    </svg>
+                                </div>
 
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a
-                                        href="#"
-                                        class="btn btn-sm btn-primary flex-fill me-2"
+                                {# #}
+                                <form
+                                        id="gift-form-{{ item.id }}"
+                                        action="{{ path('cart_gift', {id: item.id}) }}"
+                                        method="post"
+                                        class="hidden"
                                 >
-                                    Details
-                                </a>
-                                {# corbeille #}
-                                <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 16 16"
-                                        class="trash-icon"
-                                        title="Supprimer du panier"
-                                        onclick="window.location='{{ path('cart_remove', {id: item.id}) }}';"
-                                >
-                                    <path d="M5.5 5.5A.5.5 0 016 5h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z"/>
-                                    <path fill-rule="evenodd"
-                                          d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 010-2H5V1.5A1.5 1.5 0 016.5 0h3A1.5 1.5 0 0111 1.5V2h3a1 1 0 011 1zm-3 0V1.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V3h4zM4 4v9a1 1 0 001 1h6a1 1 0 001-1V4H4z"
-                                    />
-                                </svg>
+                                    <input type="hidden" name="recipient" id="hidden-recipient-{{ item.id }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('gift' ~ item.id) }}">
+                                </form>
+
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <a href="#" class="btn btn-sm btn-primary flex-fill me-2">Details</a>
+                                    <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 16 16"
+                                            class="trash-icon"
+                                            title="Retirer du panier"
+                                            onclick="window.location='{{ path('cart_remove', {id: item.id}) }}';"
+                                    >
+                                        <path d="M5.5 5.5A.5.5 0 016 5h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z"/>
+                                        <path fill-rule="evenodd"
+                                              d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 010-2H5V1.5A1.5 1.5 0 016.5 0h3A1.5 1.5 0 0111 1.5V2h3a1 1 0 011 1zm-3 0V1.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V3h4zM4 4v9a1 1 0 001 1h6a1 1 0 001-1V4H4z"
+                                        />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             {% else %}
                 <div class="col-12">
-                    <p class="text-center fs-5 text-muted">Your cart is empty.</p>
+                    <p class="text-center fs-5 text-muted">Your Cart is empty.</p>
                 </div>
             {% endfor %}
         </div>
     </div>
+
+    <script>
+        function toggleGiftForm(button) {
+            const itemId = button.dataset.itemId;
+            const giftGroup = document.getElementById(`gift-group-${itemId}`);
+
+            button.classList.add('hidden');
+            giftGroup.classList.remove('hidden');
+            document.getElementById(`gift-input-${itemId}`).focus();
+        }
+
+        function submitGift(itemId) {
+            const input = document.getElementById(`gift-input-${itemId}`);
+            const recipient = input.value.trim();
+
+            if (recipient) {
+                document.getElementById(`hidden-recipient-${itemId}`).value = recipient;
+                document.getElementById(`gift-form-${itemId}`).submit();
+            }
+        }
+    </script>
 {% endblock %}
