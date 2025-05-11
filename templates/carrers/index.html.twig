@@ -1,20 +1,74 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CarrersController!{% endblock %}
+{% block title %}Careers at GameHub{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<section class="py-5 bg-dark text-white">
+    <div class="container mb-5">
+        <h1 class="display-5 fw-bold mb-3">Join the GameHub Team</h1>
+        <p class="lead">We’re building the future of gaming — and we want passionate, creative people like you on our team.</p>
+    </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="container">
+        <h2 class="mb-4">Why Work With Us?</h2>
+        <p class="mb-5 text-secondary">
+            At GameHub, we foster an inclusive, innovative, and collaborative environment where ideas thrive. Whether you're a developer, designer, marketer, or gamer at heart, there's a place for you here.
+        </p>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/src/Controller/CarrersController.php</code></li>
-        <li>Your template at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/templates/carrers/index.html.twig</code></li>
-    </ul>
-</div>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card h-100 bg-dark text-white border-0 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <span class="material-icons align-middle me-2">trending_up</span>Growth Opportunities
+                        </h5>
+                        <p class="card-text text-secondary">We invest in your learning and career advancement through mentorship, workshops, and leadership roles.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 bg-dark text-white border-0 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <span class="material-icons align-middle me-2">groups</span>Passionate Team
+                        </h5>
+                        <p class="card-text text-secondary">You'll work with game lovers and creative thinkers who care deeply about delivering top-notch experiences.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 bg-dark text-white border-0 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <span class="material-icons align-middle me-2">public</span>Flexible & Remote-Friendly
+                        </h5>
+                        <p class="card-text text-secondary">Work where you’re most productive — in our office or from anywhere in the world.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="mb-3">Open Positions</h3>
+        <p class="text-secondary mb-4">We're currently hiring for the following roles:</p>
+
+        <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center border-secondary">
+                <span><span class="material-icons align-middle me-2">code</span>Frontend Developer</span> 
+                <span class="badge bg-primary rounded-pill">Remote</span>
+            </li>
+            <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center border-secondary">
+                <span><span class="material-icons align-middle me-2">design_services</span>UI/UX Designer</span>
+                <span class="badge bg-secondary rounded-pill">Hybrid</span>
+            </li>
+            <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center border-secondary">
+                <span><span class="material-icons align-middle me-2">campaign</span>Marketing Intern</span>
+                <span class="badge bg-success rounded-pill">Full-time</span>
+            </li>
+        </ul>
+
+        <a href="#" class="btn btn-outline-light">
+            <span class="material-icons align-middle me-1">send</span> Apply Now
+        </a>
+    </div>
+</section>
 {% endblock %}
