@@ -121,7 +121,9 @@
                             <div class="card-body text-center">
                                 <h3 class="game-price">${{ game.price|number_format(2) }}</h3>
                                 <button class="btn btn-primary btn-lg w-100 mt-3">
-                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                    <a href="{{ path('cart_add', { 'id': game.id }) }}" class="text-white" style="text-decoration: none;">
+                                        <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                    </a>
                                 </button>
                             </div>
                         </div>
