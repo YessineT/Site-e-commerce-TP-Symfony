@@ -1,20 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AboutController!{% endblock %}
+{% block title %}About Us - GameHub{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .about-wrapper {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        color: #f1f1f1;
+        text-align: left;
+    }
+
+    .about-wrapper h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #ffffff;
+    }
+
+    .about-wrapper p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/src/Controller/AboutController.php</code></li>
-        <li>Your template at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/templates/about/index.html.twig</code></li>
-    </ul>
+<div class="about-wrapper">
+    <h1>About GameHub</h1>
+    <p>
+        Welcome to <strong>GameHub</strong>, your ultimate destination for discovering, buying, and reviewing the best video games across all platforms.
+        Our mission is to bring gamers together by offering a rich library of games, detailed reviews, and a seamless shopping experience.
+    </p>
+    <p>
+        Whether you're into action, adventure, RPGs, or indie gems, GameHub is designed to help you find your next favorite game.
+        We're passionate about gaming and committed to building a community where both casual players and hardcore fans can thrive.
+    </p>
+    <p>
+        GameHub is developed as part of a Symfony web application project, aiming to demonstrate solid e-commerce features including
+        product browsing, user reviews, secure checkout, and personalized recommendations.
+    </p>
+    <p>
+        Thank you for visiting, and happy gaming!
+    </p>
 </div>
 {% endblock %}
