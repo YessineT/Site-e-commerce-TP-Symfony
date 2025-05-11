@@ -16,13 +16,6 @@
             margin-bottom: 2rem;
         }
         
-        .game-content {
-            background-color: rgba(255, 255, 255, 0.65); /* Slightly more opaque */
-            border-radius: 0.5rem;
-            padding: 2rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-        }
-        
         .game-thumbnail {
             width: 100%; /* Ensure full width of container */
             height: auto;
@@ -35,31 +28,39 @@
             font-weight: 700;
             margin-bottom: 1rem;
         }
-        
-        .game-meta {
-            color: #6c757d;
-            margin-bottom: 1.5rem;
+        .game-content {
+            background-color: rgba(255, 255, 255, 0.85); /* Lighter grey background with a bit of transparency */
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Lighter shadow for a soft, modern look */
+            color: #333; /* Darker text for contrast */
         }
-        
+
+        .game-meta {
+            color: #8a8a8a; /* Light grey for the meta text, making it distinct but not overpowering */
+            margin-bottom: 2rem;
+        }
+
         .game-price {
             font-size: 1.5rem;
             font-weight: 700;
             color: #28a745;
         }
-        
+
         .specs-list {
             list-style-type: none;
             padding-left: 0;
+            color: #333; /* Dark text for specs for better readability */
         }
-        
+
         .specs-list li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem; /* Spacing between list items for a clean look */
         }
-        
+
         .specs-list strong {
-            color: var(--primary-color);
+            color: #3498db; /* A blue accent for strong elements to make them stand out */
         }
-        
+       
         /* Ensure content doesn't overlap with footer */
         main {
             flex: 1;
