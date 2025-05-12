@@ -1,0 +1,43 @@
+{# templates/form/star_rating.html.twig #}
+{% block star_rating_widget %}
+    <div class="star-rating-widget" {{ stimulus_controller('star-rating') }}>
+        {% for child in form %}
+            <label class="star-rating-label">
+                <span class="star-rating-star"><input type="radio" name="{{ form.vars.full_name }}" value="{{ child.vars.value }}"
+                                                      {% if checked is defined and checked == child.vars.value %}checked{% endif %}
+                       class="star-rating-input" style="display: none;"><i class="far fa-star text-warning"></i></span>
+            </label>
+        {% endfor %}
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let controller = document.querySelector('.star-rating-widget');
+            let stars = document.querySelectorAll('label.star-rating-label');
+            function starChosen(index) {
+                for(let i = 0; i <= index; i++) {
+                    stars[i].querySelector('i').classList.remove('far');
+                    stars[i].querySelector('i').classList.add('fas');
+                }
+                for(let i = index + 1; i < stars.length; i++) {
+                    stars[i].querySelector('i').classList.remove('fas');
+                    stars[i].querySelector('i').classList.add('far');
+                }
+            }
+
+            stars.forEach((star, index) => {
+                star.addEventListener('mouseenter', () => {
+                    starChosen(index);
+                });
+            });
+
+            controller.addEventListener('mouseleave', (event) => {
+                let chosenStar = document.querySelector('.star-rating-widget input:checked');
+                if(chosenStar) {
+                    starChosen(document.querySelector('.star-rating-widget input:checked').value-1);
+                } else {
+                    starChosen(-1);
+                }
+            });
+        })
+    </script>
+{% endblock %}
