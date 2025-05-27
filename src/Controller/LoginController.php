@@ -14,6 +14,9 @@ final class LoginController extends AbstractController
     {
         // ✅ Redirect if already logged in
         if ($this->getUser()) {
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('app_admin');
+            }
             return $this->redirectToRoute('app_home');
         }
 
