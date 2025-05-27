@@ -1,0 +1,17 @@
+{% extends 'adminbase.html.twig' %}
+
+{% block title %}New Platform{% endblock %}
+
+{% block body %}
+    <div class="container py-5" style="background-color: #121212; min-height: 100vh;">
+        <div class="text-center mb-5">
+            <h1 class="text-white display-4 fw-bold">Create New Platform</h1>
+        </div>
+
+        {{ include('platform/_form.html.twig') }}
+
+        <div class="d-flex justify-content-center mt-4">
+            <a class="btn btn-outline-secondary" href="{{ path('app_platform_index') }}">Back to list</a>
+        </div>
+    </div>
+{% endblock %}

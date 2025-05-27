@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Game;
 use App\Form\Game1Form;
 use App\Repository\GameRepository;
+use App\Repository\GenreRepository;
+use App\Repository\DeveloperRepository;
+use App\Repository\PlatformRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +24,10 @@ final class GameCrudController extends AbstractController
     public function index(
         Request $request,
         PaginatorInterface $paginator,
-        GameRepository $gameRepository
+        GameRepository $gameRepository,
+        GenreRepository $genreRepository,
+        DeveloperRepository $developerRepository,
+        PlatformRepository $platformRepository
         ): Response {
             // Create query builder for database games
             $queryBuilder = $gameRepository->createQueryBuilder('g')
@@ -41,15 +47,40 @@ final class GameCrudController extends AbstractController
                     ->setParameter('isFree', $isFreeFilter);
             }
 
+            if ($genreId = $request->query->get('genre')) {
+                $queryBuilder
+                    ->andWhere('g.genre = :genreId')
+                    ->setParameter('genreId', $genreId);
+            }
+
+            if ($developerId = $request->query->get('developer')) {
+                $queryBuilder
+                    ->andWhere('g.developer = :developerId')
+                    ->setParameter('developerId', $developerId);
+            }
+
+            if ($platformId = $request->query->get('platform')) {
+                $queryBuilder
+                    ->join('g.platforms', 'p')
+                    ->andWhere('p.id = :platformId')
+                    ->setParameter('platformId', $platformId);
+            }
+
             // Paginate the database query results
             $pagination = $paginator->paginate(
                 $queryBuilder->getQuery(), // Get the query from the builder
                 $request->query->getInt('page', 1), // Current page number
                 12 // Items per page
             );
+            $genres = $genreRepository->findAll();
+            $developers = $developerRepository->findAll();
+            $platforms = $platformRepository->findAll();
 
             return $this->render('game_crud/index.html.twig', [
                 'pagination' => $pagination,
+                'genres' => $genres,
+                'developers' => $developers,
+                'platforms' => $platforms,
             ]);
     }
 

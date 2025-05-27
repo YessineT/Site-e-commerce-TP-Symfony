@@ -1,74 +1,352 @@
-{% extends 'base.html.twig' %}
+{% extends 'adminbase.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}{{ user.firstName }} {{ user.lastName }} - User Profile{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .profile-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        .info-value {
+            font-size: 1.1rem;
+            color: #212529;
+            margin-bottom: 1.5rem;
+        }
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .verified-true {
+            background: #d4edda;
+            color: #155724;
+        }
+        .verified-false {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            margin: 0.2rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .action-buttons {
+            position: sticky;
+            top: 20px;
+        }
+        .btn-custom {
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            margin: 0.25rem;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            background: linear-gradient(45deg, #5a67d8, #6b46c1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary-custom {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+        }
+        .btn-secondary-custom:hover {
+            background: linear-gradient(45deg, #5a6268, #3d4043);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+        .btn-danger-custom {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            color: white;
+        }
+        .btn-danger-custom:hover {
+            background: linear-gradient(45deg, #c82333, #bd2130);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .bio-text {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            font-style: italic;
+        }
+        .default-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+    <div class="container-fluid py-4">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center">
+                    {% if user.avatar %}
+                        <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" 
+                             class="profile-avatar" 
+                             alt="{{ user.username }}'s avatar">
+                    {% else %}
+                        <div class="default-avatar mx-auto">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h1 class="mb-2">{{ user.firstName }} {{ user.lastName }}</h1>
+                    <h4 class="mb-3 opacity-75">@{{ user.username }}</h4>
+                    <div class="d-flex align-items-center flex-wrap">
+                        <span class="status-badge {{ user.isVerified ? 'verified-true' : 'verified-false' }} me-3">
+                            <i class="fas {{ user.isVerified ? 'fa-check-circle' : 'fa-times-circle' }} me-1"></i>
+                            {{ user.isVerified ? 'Verified Account' : 'Unverified Account' }}
+                        </span>
+                        <small class="opacity-75">
+                            <i class="fas fa-calendar-alt me-1"></i>
+                            Joined {{ user.createdAt|date('F Y') }}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="action-buttons">
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" 
+                           class="btn btn-primary-custom btn-custom d-block">
+                            <i class="fas fa-edit me-2"></i>Edit Profile
+                        </a>
+                        <a href="{{ path('app_user_index') }}" 
+                           class="btn btn-secondary-custom btn-custom d-block">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <th>FirstName</th>
-                <td>{{ user.firstName }}</td>
-            </tr>
-            <tr>
-                <th>LastName</th>
-                <td>{{ user.lastName }}</td>
-            </tr>
-            <tr>
-                <th>Avatar</th>
-                <td>{{ user.avatar }}</td>
-            </tr>
-            <tr>
-                <th>Bio</th>
-                <td>{{ user.bio }}</td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td>{{ user.phone }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>LastLogin</th>
-                <td>{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="row">
+            <!-- Personal Information -->
+            <div class="col-lg-8">
+                <div class="card profile-card mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="section-title">
+                            <i class="fas fa-user-circle me-2"></i>Personal Information
+                        </h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-label">User ID</div>
+                                <div class="info-value">
+                                    <span class="badge bg-primary">#{{ user.id }}</span>
+                                </div>
+                                
+                                <div class="info-label">Email Address</div>
+                                <div class="info-value">
+                                    <i class="fas fa-envelope me-2 text-muted"></i>
+                                    <a href="mailto:{{ user.email }}" class="text-decoration-none">
+                                        {{ user.email }}
+                                    </a>
+                                </div>
+                                
+                                <div class="info-label">Phone Number</div>
+                                <div class="info-value">
+                                    {% if user.phone %}
+                                        <i class="fas fa-phone me-2 text-muted"></i>
+                                        <a href="tel:{{ user.phone }}" class="text-decoration-none">
+                                            {{ user.phone }}
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted fst-italic">Not provided</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="info-label">Account Roles</div>
+                                <div class="info-value">
+                                    {% for role in user.roles %}
+                                        <span class="role-badge">
+                                            {{ role|replace({'ROLE_': ''}) }}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="info-label">Last Login</div>
+                                <div class="info-value">
+                                    {% if user.lastLogin %}
+                                        <i class="fas fa-clock me-2 text-muted"></i>
+                                        {{ user.lastLogin|date('F j, Y \\a\\t g:i A') }}
+                                    {% else %}
+                                        <span class="text-muted fst-italic">Never logged in</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="info-label">Last Updated</div>
+                                <div class="info-value">
+                                    {% if user.updatedAt %}
+                                        <i class="fas fa-sync-alt me-2 text-muted"></i>
+                                        {{ user.updatedAt|date('F j, Y \\a\\t g:i A') }}
+                                    {% else %}
+                                        <span class="text-muted fst-italic">Never updated</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if user.bio %}
+                            <div class="info-label">Biography</div>
+                            <div class="bio-text">
+                                <i class="fas fa-quote-left me-2"></i>
+                                {{ user.bio }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+            <!-- Quick Stats & Security -->
+            <div class="col-lg-4">
+                <div class="card profile-card mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="section-title">
+                            <i class="fas fa-shield-alt me-2"></i>Account Security
+                        </h3>
+                        
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="info-label mb-0">Password Status</span>
+                            <span class="badge bg-success">
+                                <i class="fas fa-lock me-1"></i>Protected
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="info-label mb-0">Email Verification</span>
+                            <span class="badge {{ user.isVerified ? 'bg-success' : 'bg-warning' }}">
+                                <i class="fas {{ user.isVerified ? 'fa-check' : 'fa-exclamation-triangle' }} me-1"></i>
+                                {{ user.isVerified ? 'Verified' : 'Pending' }}
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="info-label mb-0">Account Status</span>
+                            <span class="badge bg-success">
+                                <i class="fas fa-user-check me-1"></i>Active
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                <div class="card profile-card">
+                    <div class="card-body p-4">
+                        <h3 class="section-title">
+                            <i class="fas fa-chart-bar me-2"></i>Account Timeline
+                        </h3>
+                        
+                        <div class="timeline-item mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="timeline-icon me-3">
+                                    <i class="fas fa-user-plus text-primary"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Account Created</div>
+                                    <small class="text-muted">{{ user.createdAt|date('F j, Y') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if user.lastLogin %}
+                        <div class="timeline-item">
+                            <div class="d-flex align-items-center">
+                                <div class="timeline-icon me-3">
+                                    <i class="fas fa-sign-in-alt text-success"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Last Login</div>
+                                    <small class="text-muted">{{ user.lastLogin|date('F j, Y') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-    {{ include('user/_delete_form.html.twig') }}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Add smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on page load
+            const cards = document.querySelectorAll('.profile-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
 {% endblock %}

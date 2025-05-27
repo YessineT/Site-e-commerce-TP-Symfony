@@ -1,10 +1,11 @@
 {% extends 'adminbase.html.twig' %}
 
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .stat-card { transition: transform 0.3s; }
+    .stat-card:hover { transform: translateY(-5px); }
 </style>
 <div class="container">
     <div class="example-wrapper">
@@ -16,10 +17,10 @@
         </p>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- Users Card -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
+    <!-- Management Cards (Centered) -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-5 mb-4">
+            <div class="card h-100 shadow-sm stat-card">
                 <div class="card-body text-center">
                     <i class="fas fa-users fa-3x text-primary mb-3"></i>
                     <h5 class="card-title">User Management</h5>
@@ -29,9 +30,8 @@
             </div>
         </div>
         
-        <!-- Content Card -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
+        <div class="col-md-5 mb-4">
+            <div class="card h-100 shadow-sm stat-card">
                 <div class="card-body text-center">
                     <i class="fas fa-newspaper fa-3x text-primary mb-3"></i>
                     <h5 class="card-title">Content Management</h5>
@@ -40,19 +40,8 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Analytics Card -->
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="fas fa-chart-bar fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">Analytics</h5>
-                    <p class="card-text">View platform statistics and reports</p>
-                    <a href="#" class="btn btn-outline-primary">View Analytics</a>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
+
     
+</div>
 {% endblock %}
