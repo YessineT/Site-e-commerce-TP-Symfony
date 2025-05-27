@@ -14,12 +14,10 @@ final class AdminController extends AbstractController
     {
         if ($this->isGranted('ROLE_ADMIN')) {
             return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
-            ]);    
+                'controller_name' => 'AdminController',
+            ]);
+        } else {
+            return $this->redirectToRoute('app_admin');
         }
-        else {
-            return $this->redirectToRoute('app_home');
-        }
-
     }
 }
