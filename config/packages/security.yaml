@@ -28,7 +28,9 @@ security:
                  login_path: app_login
                  check_path: app_login
                  enable_csrf: true
-                 default_target_path: app_homepage  # Change if you want
+                 default_target_path: app_homepage
+                 always_use_default_target_path: false
+                 success_handler: App\Security\LoginSuccessHandler
             logout:
                 path: app_logout
                 target: app_login
