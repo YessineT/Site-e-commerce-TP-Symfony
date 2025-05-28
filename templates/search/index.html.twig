@@ -83,31 +83,41 @@
                             <h5>Search Results</h5>
                             <div class="d-flex flex-wrap gap-2">
                                 {% if app.request.query.get('query') %}
-                                    <span class="badge bg-primary">
+                                    {% set newParams = app.request.query.all()|filter((v, k) => k != 'query') %}
+                                    <a href="{{ path(app.request.attributes.get('_route'), newParams) }}">
+                                        <span class="badge bg-primary">
                                         Search: {{ app.request.query.get('query') }}
                                         <button class="btn-close btn-close-white btn-sm ms-2" data-clear="query"></button>
-                                    </span>
+                                        </span>
+                                    </a>
+
                                 {% endif %}
 
                                 {% if app.request.query.get('minPrice') > 0 or app.request.query.get('maxPrice') < 100 %}
-                                    <span class="badge bg-info">
-                                        Price: ${{ app.request.query.get('minPrice') }} - ${{ app.request.query.get('maxPrice') }}
-                                        <button class="btn-close btn-close-white btn-sm ms-2" data-clear="price"></button>
-                                    </span>
+                                    {% set newParams = app.request.query.all()|filter((v, k) => k != 'minPrice' and k != 'maxPrice') %}
+                                    <a href="{{ path(app.request.attributes.get('_route'), newParams) }}">
+                                        <span class="badge bg-info">
+                                            Price: ${{ app.request.query.get('minPrice') }} - ${{ app.request.query.get('maxPrice') }}
+                                            <button class="btn-close btn-close-white btn-sm ms-2" data-clear="price"></button>
+                                        </span>
+                                    </a>
                                 {% endif %}
 
                                 {% if app.request.query.get('minRating') %}
-                                    <span class="badge bg-warning text-dark">
-                                        Rating: {{ app.request.query.get('minRating') }}+ stars
-                                        <button class="btn-close btn-close-white btn-sm ms-2" data-clear="minRating"></button>
-                                    </span>
+                                    {% set newParams = app.request.query.all()|filter((v, k) => k != 'minRating') %}
+                                    <a href="{{ path(app.request.attributes.get('_route'), newParams) }}">
+                                        <span class="badge bg-warning text-dark">
+                                            Rating: {{ app.request.query.get('minRating') }}+ stars
+                                            <button class="btn-close btn-close-white btn-sm ms-2" data-clear="minRating"></button>
+                                        </span>
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>
                     {% endif %}
 
                     <div class="row g-4" id="games-container">
-                        {% include 'store/nextPage.html.twig' %}
+                        {% include 'search/nextPage.html.twig' %}
                     </div>
 
                     <div id="loading-spinner" class="text-center py-4">

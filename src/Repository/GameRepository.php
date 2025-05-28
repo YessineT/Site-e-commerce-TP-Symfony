@@ -115,7 +115,7 @@ class GameRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('g');
 
         if ($query) {
-            $qb->andWhere('g.title LIKE :query')
+            $qb->andWhere('g.title LIKE :query OR g.description LIKE :query')
                 ->setParameter('query', '%' . $query . '%');
         }
 
@@ -148,7 +148,7 @@ class GameRepository extends ServiceEntityRepository
 
         // Search query
         if (!empty($query)) {
-            $qb->andWhere('g.name LIKE :query OR g.description LIKE :query')
+            $qb->andWhere('g.title LIKE :query OR g.description LIKE :query')
                 ->setParameter('query', '%' . $query . '%');
         }
 
