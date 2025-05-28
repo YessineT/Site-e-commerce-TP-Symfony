@@ -7,7 +7,7 @@ import json
 import hashlib
 
 # Configuration
-API_KEY = "API_KEY"
+API_KEY = "58cc630439a8a8a9e0a02faa184638666c2de169"
 DB_CONFIG = {
     'host': '127.0.0.1',
     'user': 'root',
@@ -169,7 +169,7 @@ def import_games():
     # Giant Bomb platform IDs for our target platforms
     PLATFORM_FILTER = {
         'PC': '94',
-        'PlayStation 5': '146', 
+        'PlayStation 5': '146',
         'Xbox Series X|S': '145'
     }
 
@@ -177,16 +177,16 @@ def import_games():
     params = {
         'api_key': API_KEY,
         'format': 'json',
-        'limit': 100,  # Adjust batch size as needed
-        'field_list': 'id,name,deck,description,original_release_date,image,developers,publishers,genres,platforms',
-        'filter': 'platforms:' + '|'.join(PLATFORM_FILTER.values()),
+        'limit': 400,
+        'field_list': 'id,name,original_release_date',
+        'filter': f"platforms:{'|'.join(PLATFORM_FILTER.values())}",
         'sort': 'original_release_date:desc',
     }
-    
+
     try:
         conn = mysql.connector.connect(**DB_CONFIG)
         cursor = conn.cursor()
-        
+
         print(f"Starting import for platforms: {', '.join(PLATFORM_FILTER.keys())}...")
         response = requests.get(
             "https://www.giantbomb.com/api/games/",
@@ -195,37 +195,37 @@ def import_games():
             timeout=15
         )
         response.raise_for_status()
-        
+
         data = response.json()
-        
+
         for game in data.get('results', []):
             game_id = game['id']
             title = game['name']
-            
+
             # Check if game already exists
             cursor.execute("SELECT id FROM game WHERE title = %s", (title,))
             if cursor.fetchone():
                 print(f"Skipping existing game: {title}")
                 continue
-            
+
             # Verify platforms (additional client-side filtering)
             game_platforms = [p['name'] for p in game.get('platforms', [])]
             valid_platforms = [p for p in game_platforms if p in PLATFORM_FILTER.keys()]
-            
+
             if not valid_platforms:
                 print(f"Skipping {title} - not available on target platforms")
                 continue
-            
+
             # Process game info
             slug = title.lower().replace(' ', '-').replace(':', '')
             description = game.get('description') or ''
             short_desc = game.get('deck') or ''
             release_date = game.get('original_release_date')
             image_url = game.get('image', {}).get('original_url')
-            
+
             # Download image
             thumbnail = download_image(image_url, game_id) if image_url else None
-            
+
             # Process developers
             developer_id = None
             if game.get('developers'):
@@ -234,7 +234,7 @@ def import_games():
                     developer_id = get_or_create_developer(conn, first_dev)
             if(developer_id is None):
                 developer_id = 1
-            
+
             # Process publishers
             publisher_id = None
             if game.get('publishers'):
@@ -243,7 +243,7 @@ def import_games():
                     publisher_id = get_or_create_publisher(conn, first_pub)
             if(publisher_id is None):
                 publisher_id = 1
-            
+
             # Process primary genre
             genre_id = None
             if game.get('genres'):
@@ -252,14 +252,14 @@ def import_games():
                     genre_id = get_or_create_genre(conn, first_genre)
             if(genre_id is None):
                 genre_id = 1
-            
+
             # Insert game
             cursor.execute("""
                 INSERT INTO game (
-                    title, slug, description, short_description, 
+                    title, slug, description, short_description,
                     release_date, thumbnail, developer_id, publisher_id, genre_id,
-                    price, is_free, min_os, min_processor, min_memory, 
-                    min_graphics, min_storage, rec_os, rec_processor, 
+                    price, is_free, min_os, min_processor, min_memory,
+                    min_graphics, min_storage, rec_os, rec_processor,
                     rec_memory, rec_graphics, rec_storage
                 ) VALUES (
                     %s, %s, %s, %s, %s, %s, %s, %s, %s,
@@ -273,9 +273,9 @@ def import_games():
                 'Windows 10', '2.5 GHz', '8 GB', 'GTX 660', '50 GB',  # Default minimum specs
                 'Windows 10', '3.5 GHz', '16 GB', 'GTX 1060', '50 GB'  # Default recommended specs
             ))
-            
+
             db_game_id = cursor.lastrowid
-            
+
             # Process platforms (only our filtered ones)
             for platform_name in valid_platforms:
                 platform_id = get_or_create_platform(conn, platform_name)
@@ -283,7 +283,7 @@ def import_games():
                     INSERT IGNORE INTO game_platform (game_id, platform_id)
                     VALUES (%s, %s)
                 """, (db_game_id, platform_id))
-            
+
             # Process additional genres
             if game.get('genres') and len(game['genres']) > 1:
                 for genre in game['genres'][1:]:  # Skip first genre already used
@@ -294,15 +294,15 @@ def import_games():
                             INSERT IGNORE INTO game_genres (game_id, genre_id)
                             VALUES (%s, %s)
                         """, (db_game_id, genre_id))
-            
+
             conn.commit()
             print(f"Imported: {title} (Platforms: {', '.join(valid_platforms)})")
-            
+
             # Respect API rate limits
             time.sleep(1)
-        
+
         print("Game import completed successfully!")
-        
+
     except Exception as e:
         print(f"Error during import: {e}")
         if 'conn' in locals():
