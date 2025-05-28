@@ -3,18 +3,79 @@
 {% block title %}Hello SearchController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <section class="py-5 bg-dark text-white">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-4">Welcome to the GameHub Search Page</h1>
+            <p class="lead">Browse our collection of games and accessories. Find your next adventure!</p>
+        </div>
+    </section>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <section class="py-5">
+        <div class="container px-4">
+            <div class="row g-4">
+                <form method="POST">
+                    <input type="text">
+                </form>
+            </div>
+        </div>
+    </section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/src/Controller/SearchController.php</code></li>
-        <li>Your template at <code>C:/Users/mhamd/OneDrive/Bureau/GL/Web/Site-e-commerce-TP-Symfony/templates/search/index.html.twig</code></li>
-    </ul>
-</div>
+    <section class="py-5">
+        <div class="container px-4">
+            <div class="row g-4" id="games-container">
+                {% include 'store/nextPage.html.twig' %}
+            </div>
+            <div id="loading-spinner" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div id="end-of-results" class="text-center py-4 text-muted text-white-50" style="display: none;">
+                No more games to load
+            </div>
+        </div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let nextPage = {{ nextPage }};
+            const maxPage = {{ maxPage }};
+            let isLoading = false;
+
+            window.addEventListener('scroll', function() {
+                if (isLoading || nextPage > maxPage) return;
+
+                // Check if we're near the bottom of the page
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                    loadMoreGames();
+                }
+            });
+
+            function loadMoreGames() {
+                isLoading = true;
+                document.getElementById('loading-spinner').style.display = 'block';
+
+                fetch(`/store?page=${nextPage}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.html) {
+                            document.getElementById('games-container').insertAdjacentHTML('beforeend', data.html);
+                            nextPage = data.nextPage;
+
+                            if (nextPage > data.maxPage) {
+                                document.getElementById('end-of-results').style.display = 'block';
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => {
+                        isLoading = false;
+                        document.getElementById('loading-spinner').style.display = 'none';
+                    });
+            }
+        });
+    </script>
 {% endblock %}
