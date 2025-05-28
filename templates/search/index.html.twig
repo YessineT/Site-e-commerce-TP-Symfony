@@ -2,41 +2,208 @@
 
 {% block title %}Hello SearchController!{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/store.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/search.css') }}"
+{% endblock %}
+
 {% block body %}
     <section class="py-5 bg-dark text-white">
         <div class="container">
-            <h1 class="display-5 fw-bold mb-4">Welcome to the GameHub Search Page</h1>
-            <p class="lead">Browse our collection of games and accessories. Find your next adventure!</p>
+            <h1 class="display-5 fw-bold mb-4">Find Your Next Adventure</h1>
+            <p class="lead">Search our collection of games and accessories</p>
         </div>
     </section>
 
     <section class="py-5">
-        <div class="container px-4">
-            <div class="row g-4">
-                <form method="POST">
-                    <input type="text">
-                </form>
-            </div>
-        </div>
-    </section>
+        <div class="container">
+            <div class="row">
+                <!-- Filter Column -->
+                <div class="col-lg-3">
+                    <button class="filter-toggle">
+                        <i class="fas fa-filter me-2"></i>Filters
+                    </button>
 
-    <section class="py-5">
-        <div class="container px-4">
-            <div class="row g-4" id="games-container">
-                {% include 'store/nextPage.html.twig' %}
-            </div>
-            <div id="loading-spinner" class="text-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <div class="filter-section" id="filter-section">
+                        <form id="search-filters" method="GET" action="{{ path('app_search') }}">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" name="query" placeholder="Search games..." value="{{ app.request.query.get('query') }}">
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-group-title">Price Range</span>
+                                <div class="price-slider">
+                                    <input type="range" class="price-range" min="0" max="100"
+                                           value="{{ app.request.query.get('maxPrice', 100) }}" name="maxPrice">
+                                </div>
+                                <div class="price-inputs">
+                                    <input type="number" placeholder="Min" name="minPrice" value="{{ app.request.query.get('minPrice', 0) }}">
+                                    <input type="number" placeholder="Max" name="maxPrice" value="{{ app.request.query.get('maxPrice', 100) }}">
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-group-title">Rating</span>
+                                <div class="rating-filter">
+                                    {% for i in 5..1 %}
+                                        <label class="star-option">
+                                            <input type="radio" name="minRating" value="{{ i }}"
+                                                   {% if app.request.query.get('minRating') == i %}checked{% endif %}>
+                                            <div class="stars">
+                                                {% for j in 1..i %}<i class="fas fa-star"></i>{% endfor %}
+                                            </div>
+                                            & up
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="filter-group">
+                                <span class="filter-group-title">Sort By</span>
+                                <select class="form-select bg-dark text-white" name="sort">
+                                    <option value="newest" {% if app.request.query.get('sort') == 'newest' %}selected{% endif %}>Newest</option>
+                                    <option value="price_asc" {% if app.request.query.get('sort') == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_desc" {% if app.request.query.get('sort') == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                                    <option value="rating" {% if app.request.query.get('sort') == 'rating' %}selected{% endif %}>Highest Rated</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="apply-filters">
+                                <i class="fas fa-check me-2"></i>Apply Filters
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Results Column -->
+                <div class="col-lg-9">
+                    {% if app.request.query.count() > 0 %}
+                        <div class="mb-4">
+                            <h5>Search Results</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                {% if app.request.query.get('query') %}
+                                    <span class="badge bg-primary">
+                                        Search: {{ app.request.query.get('query') }}
+                                        <button class="btn-close btn-close-white btn-sm ms-2" data-clear="query"></button>
+                                    </span>
+                                {% endif %}
+
+                                {% if app.request.query.get('minPrice') > 0 or app.request.query.get('maxPrice') < 100 %}
+                                    <span class="badge bg-info">
+                                        Price: ${{ app.request.query.get('minPrice') }} - ${{ app.request.query.get('maxPrice') }}
+                                        <button class="btn-close btn-close-white btn-sm ms-2" data-clear="price"></button>
+                                    </span>
+                                {% endif %}
+
+                                {% if app.request.query.get('minRating') %}
+                                    <span class="badge bg-warning text-dark">
+                                        Rating: {{ app.request.query.get('minRating') }}+ stars
+                                        <button class="btn-close btn-close-white btn-sm ms-2" data-clear="minRating"></button>
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row g-4" id="games-container">
+                        {% include 'store/nextPage.html.twig' %}
+                    </div>
+
+                    <div id="loading-spinner" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div id="end-of-results" class="text-center py-4 text-muted" style="display: none;">
+                        <i class="fas fa-check-circle me-2"></i>No more games to load
+                    </div>
                 </div>
             </div>
-            <div id="end-of-results" class="text-center py-4 text-muted text-white-50" style="display: none;">
-                No more games to load
-            </div>
         </div>
     </section>
+{% endblock %}
+
+{% block javascripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile filter toggle
+            const filterToggle = document.querySelector('.filter-toggle');
+            const filterSection = document.getElementById('filter-section');
+
+            if (filterToggle) {
+                filterToggle.addEventListener('click', function() {
+                    filterSection.classList.toggle('show');
+                });
+            }
+
+            // Filter option toggles
+            document.querySelectorAll('.filter-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    updateFilterInput(this.dataset.filter, this.dataset.value);
+                });
+            });
+
+            function updateFilterInput(filterName, value) {
+                const input = document.getElementById(`${filterName}-input`);
+                let currentValues = input.value ? input.value.split(',') : [];
+
+                if (currentValues.includes(value)) {
+                    currentValues = currentValues.filter(v => v !== value);
+                } else {
+                    currentValues.push(value);
+                }
+
+                input.value = currentValues.join(',');
+            }
+
+            // Clear filter chips
+            document.querySelectorAll('[data-clear]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.dataset.clear;
+                    const value = this.dataset.value;
+
+                    if (filter === 'price') {
+                        document.querySelector('input[name="minPrice"]').value = 0;
+                        document.querySelector('input[name="maxPrice"]').value = 100;
+                    } else if (filter === 'query') {
+                        document.querySelector('input[name="query"]').value = '';
+                    } else if (value) {
+                        // For category/platform with specific value
+                        const option = document.querySelector(`.filter-option[data-filter="${filter}"][data-value="${value}"]`);
+                        if (option) option.classList.remove('active');
+
+                        const input = document.getElementById(`${filter}-input`);
+                        let currentValues = input.value ? input.value.split(',') : [];
+                        currentValues = currentValues.filter(v => v !== value);
+                        input.value = currentValues.join(',');
+                    } else {
+                        // For rating or other single-value filters
+                        document.querySelector(`input[name="${filter}"]`).value = '';
+                        document.querySelector(`input[name="${filter}"]`).checked = false;
+                    }
+
+                    document.getElementById('search-filters').submit();
+                });
+            });
+
+            // Price range sync
+            const priceRange = document.querySelector('.price-range');
+            const maxPriceInput = document.querySelector('input[name="maxPrice"]');
+
+            if (priceRange && maxPriceInput) {
+                priceRange.addEventListener('input', function() {
+                    maxPriceInput.value = this.value;
+                });
+
+                maxPriceInput.addEventListener('change', function() {
+                    priceRange.value = this.value;
+                });
+            }
+
+            // Infinite scroll
             let nextPage = {{ nextPage }};
             const maxPage = {{ maxPage }};
             let isLoading = false;
@@ -44,7 +211,6 @@
             window.addEventListener('scroll', function() {
                 if (isLoading || nextPage > maxPage) return;
 
-                // Check if we're near the bottom of the page
                 if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
                     loadMoreGames();
                 }
@@ -54,7 +220,17 @@
                 isLoading = true;
                 document.getElementById('loading-spinner').style.display = 'block';
 
-                fetch(`/store?page=${nextPage}`, {
+                const params = new URLSearchParams(window.location.search);
+                const queryParams = {};
+
+                for (const [key, value] of params.entries()) {
+                    queryParams[key] = value;
+                }
+
+                console.log(queryParams); // Example output: { name: "John", age: "25" }
+
+
+                fetch(`/search?page=${nextPage}&${params}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
                     }

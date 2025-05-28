@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Game;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -108,6 +109,54 @@ class GameRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function search(
+        string $query = '',
+        float $minPrice = 0,
+        float $maxPrice = 100,
+        int $minRating = 0,
+        string $sort = 'newest',
+        int $page = 1,
+        int $limit = 12
+    ): array {
+        $qb = $this->createQueryBuilder('g')
+            ->where('g.price BETWEEN :minPrice AND :maxPrice')
+            ->setParameter('minPrice', $minPrice)
+            ->setParameter('maxPrice', $maxPrice);
+
+        // Search query
+        if (!empty($query)) {
+            $qb->andWhere('g.name LIKE :query OR g.description LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        }
+
+        // Rating filter
+        if ($minRating > 0) {
+            $qb->andWhere('g.rating >= :minRating')
+                ->setParameter('minRating', $minRating);
+        }
+
+        // Sorting
+        switch ($sort) {
+            case 'newest':
+                $qb->orderBy('g.releaseDate', 'DESC');
+                break;
+            case 'price_asc':
+                $qb->orderBy('g.price', 'ASC');
+                break;
+            case 'price_desc':
+            default:
+                $qb->orderBy('g.price', 'DESC');
+                break;
+        }
+
+        // Pagination
+        $qb->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
 
     //    /**
     //     * @return Game[] Returns an array of Game objects
