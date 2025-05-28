@@ -2,18 +2,27 @@
 {% block title %}My Cart{% endblock %}
 
 {% block body %}
-    <div class="container my-5">
-        <h1 class="mb-4">Your Cart</h1>
-        <p class="lead">Review the items in your cart before proceeding to checkout.</p>
+    <link rel="stylesheet" href="{{ asset('css/darkblue.css') }}">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+<section class="py-5 darker-bg text-white">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-4">Your Cart</h1>
+            <p class="lead">Review the items in your cart before proceeding to checkout</p>
+            <div class="d-flex justify-content-between align-items-center">
             <h4>
                 Total:
                 <span id="cart-total" class="badge bg-primary fs-5">
-                    {{ total|number_format(2, '.', ',') }} €
+                    {{ total|number_format(2, '.', ',') }} $
                 </span>
             </h4>
         </div>
+        </div>
+    </section>
+    <div class="container my-5">
+    
+        
+
+        
 
         <style>
             .trash-icon, .send-icon {
@@ -43,10 +52,10 @@
             .hidden { display: none !important; }
         </style>
 
-        <div class="row">
+        <div class="row ">
             {% for item in items %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
+                <div class="col-md-4 mb-4 ">
+                    <div class="card h-100 shadow-sm bg-blue-dark">
                         {% if item.game.thumbnail is defined %}
                             <img
                                     src="{{ asset('uploads/games/' ~ item.game.thumbnail) }}"
@@ -62,15 +71,31 @@
 
                             <div class="mt-auto">
                                 {# offrir --when click #}
+                                    <div class="d-flex align-items-center gap-4">
+
                                 <button
                                         type="button"
-                                        class="btn btn-outline-success gift-btn"
+                                        class="btn btn-success rounded-pill px-1 w-100 fs-6"
                                         data-item-id="{{ item.id }}"
                                         onclick="toggleGiftForm(this)"
                                 >
                                     Make a gift
                                 </button>
 
+                                <a href="{{ path('app_game_about', { id: item.game.id }) }}"  class="btn btn-primary rounded-pill px-5 fs-6">Details</a>
+                                <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 16 16"
+                                            class="trash-icon"
+                                            title="Retirer du panier"
+                                            onclick="window.location='{{ path('cart_remove', {id: item.id}) }}';"
+                                    >
+                                        <path d="M5.5 5.5A.5.5 0 016 5h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z"/>
+                                        <path fill-rule="evenodd"
+                                              d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 010-2H5V1.5A1.5 1.5 0 016.5 0h3A1.5 1.5 0 0111 1.5V2h3a1 1 0 011 1zm-3 0V1.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V3h4zM4 4v9a1 1 0 001 1h6a1 1 0 001-1V4H4z"
+                                        />
+                                    </svg>
+    </div>
                                 {# zone texte +icon envoyer #}
                                 <div
                                         id="gift-group-{{ item.id }}"
@@ -104,19 +129,7 @@
                                 </form>
 
                                 <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <a href="#" class="btn btn-sm btn-primary flex-fill me-2">Details</a>
-                                    <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 16 16"
-                                            class="trash-icon"
-                                            title="Retirer du panier"
-                                            onclick="window.location='{{ path('cart_remove', {id: item.id}) }}';"
-                                    >
-                                        <path d="M5.5 5.5A.5.5 0 016 5h4a.5.5 0 010 1H6a.5.5 0 01-.5-.5z"/>
-                                        <path fill-rule="evenodd"
-                                              d="M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 010-2H5V1.5A1.5 1.5 0 016.5 0h3A1.5 1.5 0 0111 1.5V2h3a1 1 0 011 1zm-3 0V1.5a.5.5 0 00-.5-.5h-3a.5.5 0 00-.5.5V3h4zM4 4v9a1 1 0 001 1h6a1 1 0 001-1V4H4z"
-                                        />
-                                    </svg>
+                                    
                                 </div>
                             </div>
                         </div>

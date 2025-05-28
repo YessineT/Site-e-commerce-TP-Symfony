@@ -16,7 +16,7 @@
     <style>
         :root {
             --primary-color: #2a2a2a;
-            --secondary-color: #1a1a1a;
+            --secondary-color: #040e19;
             --accent-color: #0074e4;
             --text-color: #ffffff;
             --text-secondary: #cccccc;
@@ -26,10 +26,32 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--primary-color);
             color: var(--text-color);
+   background: linear-gradient(90deg,rgba(18, 48, 99, 1) 0%, rgba(6, 24, 36, 1) 34%, rgba(18, 48, 99, 1) 63%, rgba(6, 24, 36, 1) 100%) !important;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
+
+        .darker-bg {
+  position: relative;
+  background: inherit;
+  color: inherit;
+}
+
+.darker-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.33);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.darker-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
 
         .footer {
             padding-top: 2rem;
@@ -56,14 +78,66 @@
         }
 
         .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-            url('{{ asset('images/hero-bg1.jpg') }}') no-repeat center center;
+            position: relative;
+             background: inherit;
+            color: inherit;
             background-size: cover;
             height: 70vh;
             display: flex;
             align-items: center;
             position: relative;
         }
+        .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.33);
+        pointer-events: none;
+        z-index: 0;
+        }
+
+        .hero-section > * {
+        position: relative;
+        z-index: 1;
+}
+
+
+
+
+
+
+
+.bg-blue-dark {
+    background-color: #162b47; /* slightly lighter navy */
+    color: #f1f1f1; /* light text */
+}
+
+/* Override text colors inside the card */
+.bg-blue-dark .card-title,
+.bg-blue-dark .card-text {
+    color: #f1f1f1;
+}
+
+/* Star rating color */
+.bg-blue-dark .rating i {
+    color: #ffc107; /* golden star */
+}
+
+/* Price text color */
+.text-primary {
+    color: #4db8ff !important; /* lighter blue for emphasis */
+}
+
+/* Optional card hover effect */
+.bg-blue-dark.card:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
 
         /* ... (keep all your existing CSS styles) ... */
     </style>
@@ -118,15 +192,28 @@
 {% block body %}{% endblock %}
 
 <!-- Footer -->
-<footer class="footer" style="background-color: #1a1a1a; color: white;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 mb-4">
-                <h5>GameHub</h5>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="{{ path('app_about') }}" class="nav-link p-0 text-light">About Us</a></li>
-                    <li class="nav-item mb-2"><a href="{{ path('app_careers') }}" class="nav-link p-0 text-light">Careers</a></li>
-                    <li class="nav-item mb-2"><a href="{{ path('app_blog') }}" class="nav-link p-0 text-light">Blog</a></li>
+<footer class="footer darker-bg" style="background-color: #040e19; color: white;">
+    <div class="container  ">
+        <div class="d-flex align-items-center mb-3">
+  <h4 class="mb-0 me-5">GameHub</h4>
+  <p class="text-light small mb-0">All brand names, logos, and related content are the property of their respective owners in Tunisia and other countries. The use of these trademarks does not imply any affiliation with or endorsement by them. Portions of the geospatial data displayed on this website are provided by   <a href="https://www.geonames.org" target="_blank" class="text-secondary text-decoration-none">geonames.org</a>
+ and are used under applicable terms and licenses.</p>
+</div>
+        <div class="row justify-content-center ">
+            <div class="col-auto ">
+                <ul class="nav justify-content-center align-items-center ">
+                
+                    <li class="nav-item">
+                        <a href="{{ path('app_about') }}" class="nav-link p-0 text-light">About Us</a>
+                    </li>
+                    <li class="px-2 text-light">|</li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_careers') }}" class="nav-link p-0 text-light">Careers</a>
+                    </li>
+                    <li class="px-2 text-light">|</li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_blog') }}" class="nav-link p-0 text-light">Blog</a>
+                    </li>
                 </ul>
             </div>
             <!-- ... (other footer columns) ... -->
