@@ -152,20 +152,6 @@ class GameRepository extends ServiceEntityRepository
                 ->setParameter('query', '%' . $query . '%');
         }
 
-        // Sorting
-        switch ($sort) {
-            case 'newest':
-                $qb->orderBy('g.releaseDate', 'DESC');
-                break;
-            case 'price_asc':
-                $qb->orderBy('g.price', 'ASC');
-                break;
-            case 'price_desc':
-                $qb->orderBy('g.price', 'DESC');
-                break;
-            default:
-        }
-
         // Pagination
         $qb->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
@@ -174,11 +160,30 @@ class GameRepository extends ServiceEntityRepository
             return $item->getAverageRating() >= $minRating;
         });
 
-        if($sort == 'rating') {
-            usort($result, function ($a, $b) {
-                return $a->getAverageRating() <=> $b->getAverageRating();
-            });
+        switch ($sort) {
+            case 'newest':
+                $sortfunc = function ($a, $b) {
+                    return $a->getReleaseDate() < $b->getReleaseDate();
+                };
+                break;
+            case 'price_asc':
+                $sortfunc = function ($a, $b) {
+                    return $a->getPrice() > $b->getPrice();
+                };
+                break;
+            case 'price_desc':
+                $sortfunc = function ($a, $b) {
+                    return $a->getPrice() < $b->getPrice();
+                };
+                break;
+            case 'rating':
+            default:
+            $sortfunc = function ($a, $b) {
+                return $a->getAverageRating() < $b->getAverageRating();
+            };
         }
+
+        usort($result, $sortfunc);
 
         return $result;
     }
