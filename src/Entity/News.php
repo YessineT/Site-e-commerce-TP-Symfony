@@ -32,6 +32,9 @@ class News
     #[ORM\ManyToOne]
     private ?Genre $genre = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $content = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class News
     public function setGenre(?Genre $genre): static
     {
         $this->genre = $genre;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+    
+    public function setContent(?string $content): static
+    {
+        $this->content = $content;
 
         return $this;
     }
