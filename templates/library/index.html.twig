@@ -3,10 +3,13 @@
 {% block title %}Your Game Library - GameHub{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/library.css') }}">
+    {{ parent() }}
+    {# Add only page-specific CSS here #}
+    {# <link rel="stylesheet" href="{{ asset('css/library.css') }}"> #}
 {% endblock %}
 
 {% block body %}
+
 <section class="py-5 darker-bg text-white">
     <div class="container">
         <h1 class="display-5 fw-bold mb-4">Your Game Library</h1>

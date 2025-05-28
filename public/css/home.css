@@ -23,12 +23,7 @@ body {
 }
 
 /* Dark background for footer */
-footer {
-    background-color: #1a1a1a; /* Dark footer */
-    color: white;
-    padding: 40px 0;
-    text-align: center;
-}
+
  
 .hero-section .container {
     position: relative;
@@ -215,9 +210,13 @@ footer {
     transform: translateY(-10px);
     transition: all 0.5s ease-out;
 }
-.navbar {
-    background-color: #020910 !important;
-}
+
 .free-games-section {
     background: inherit; /* inherit body background */
 }
+
+
+
+
+
+
