@@ -50,8 +50,8 @@ body {
 }
 
 .hero-section .btn-outline-light {
-    border-color: #ffffff;
-    color: #ffffff;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
 }
 
 /* Featured Games Section */

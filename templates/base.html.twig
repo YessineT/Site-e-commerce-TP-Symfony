@@ -101,6 +101,44 @@
         z-index: 1;
 }
 
+
+
+
+
+
+
+.bg-blue-dark {
+    background-color: #162b47; /* slightly lighter navy */
+    color: #f1f1f1; /* light text */
+}
+
+/* Override text colors inside the card */
+.bg-blue-dark .card-title,
+.bg-blue-dark .card-text {
+    color: #f1f1f1;
+}
+
+/* Star rating color */
+.bg-blue-dark .rating i {
+    color: #ffc107; /* golden star */
+}
+
+/* Price text color */
+.text-primary {
+    color: #4db8ff !important; /* lighter blue for emphasis */
+}
+
+/* Optional card hover effect */
+.bg-blue-dark.card:hover {
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+
         /* ... (keep all your existing CSS styles) ... */
     </style>
     {% block stylesheets %}{% endblock %}
