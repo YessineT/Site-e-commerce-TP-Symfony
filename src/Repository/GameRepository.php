@@ -112,8 +112,7 @@ class GameRepository extends ServiceEntityRepository
 
     public function countSearchResults(string $query, float $minPrice, float $maxPrice, int $minRating): int
     {
-        $qb = $this->createQueryBuilder('g')
-            ->select('COUNT(g.id)');
+        $qb = $this->createQueryBuilder('g');
 
         if ($query) {
             $qb->andWhere('g.title LIKE :query')
@@ -125,12 +124,11 @@ class GameRepository extends ServiceEntityRepository
             ->setParameter('minPrice', $minPrice)
             ->setParameter('maxPrice', $maxPrice);
 
-        if ($minRating > 0) {
-            $qb->andWhere('g.rating >= :minRating')
-                ->setParameter('minRating', $minRating);
-        }
+        $result = $qb->getQuery()->getResult();
 
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return count(array_filter($result, function ($item) use ($minRating) {
+            return $item->getAverageRating() >= $minRating;
+        }));
     }
 
 
@@ -154,12 +152,6 @@ class GameRepository extends ServiceEntityRepository
                 ->setParameter('query', '%' . $query . '%');
         }
 
-        // Rating filter
-        if ($minRating > 0) {
-            $qb->andWhere('g.rating >= :minRating')
-                ->setParameter('minRating', $minRating);
-        }
-
         // Sorting
         switch ($sort) {
             case 'newest':
@@ -169,16 +161,26 @@ class GameRepository extends ServiceEntityRepository
                 $qb->orderBy('g.price', 'ASC');
                 break;
             case 'price_desc':
-            default:
                 $qb->orderBy('g.price', 'DESC');
                 break;
+            default:
         }
 
         // Pagination
         $qb->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit);
 
-        return $qb->getQuery()->getResult();
+        $result = array_filter($qb->getQuery()->getResult(), function ($item) use ($minRating) {
+            return $item->getAverageRating() >= $minRating;
+        });
+
+        if($sort == 'rating') {
+            usort($result, function ($a, $b) {
+                return $a->getAverageRating() <=> $b->getAverageRating();
+            });
+        }
+
+        return $result;
     }
 
 
