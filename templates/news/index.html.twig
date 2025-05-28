@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    <section class="py-5 bg-dark text-white">
+    <section class="py-5 text-white darker-bg">
         <div class="container">
             <h1 class="display-5 fw-bold mb-4">Latest News</h1>
             <p class="lead">Stay up-to-date with the latest happenings in the gaming world</p>
@@ -43,6 +43,25 @@
     </section>
 
     <style>
+    .darker-bg {
+  position: relative;
+  background: inherit;
+  color: inherit;
+}
+
+.darker-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.33);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.darker-bg > * {
+  position: relative;
+  z-index: 1;
+}
         /* Optional: you can also move this CSS to news.css */
         .card-img-top {
             height: 180px;
