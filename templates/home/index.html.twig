@@ -120,19 +120,24 @@
 
 
     <!-- News Section -->
-    <section class="py-5">
+<section class="py-5">
     <div class="container">
         <h2 class="section-title">Latest News</h2>
         <div class="row">
             {% for newsItem in latestNews %}
                 <div class="col-md-4 mb-4">
                     <div class="game-card bg-secondary border-0 h-100">
-                        <div class="card-img-top-container scalable-image bg-transparent border-0">
-                            <img src="{{ asset('uploads/news/' ~ newsItem.image) }}" class="card-img-top" alt="{{ newsItem.title }}">
+                        <div class="card-img-top-container scalable-image bg-transparent border-0" 
+                             style="height: 200px; overflow: hidden;">
+                            <img src="{{ asset('uploads/news/' ~ newsItem.image) }}" 
+                                 class="card-img-top" 
+                                 alt="{{ newsItem.title }}" 
+                                 style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ newsItem.title }}</h5>
-                            <a href="{{ path('app_news_show', {id: newsItem.id, slug: newsItem.slug}) }}" class="btn btn-sm btn-primary">Read More</a>
+                            <a href="{{ path('app_news_show', {id: newsItem.id, slug: newsItem.slug}) }}" 
+                               class="btn btn-sm btn-primary">Read More</a>
                         </div>
                         <div class="card-footer bg-transparent border-0"></div>
                     </div>
@@ -144,5 +149,6 @@
         </div>
     </div>
 </section>
+
 
 {% endblock %}
