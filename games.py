@@ -12,7 +12,7 @@ DB_CONFIG = {
     'host': '127.0.0.1',
     'user': 'root',
     'password': 'Abc123987456',
-    'database': 'games1',
+    'database': 'games',
     'auth_plugin': 'mysql_native_password'
 }
 IMAGE_DIR = 'public/uploads/games/'
