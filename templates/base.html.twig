@@ -62,18 +62,6 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         .footer {
             padding-top: 2rem;
             padding-bottom: 2rem;
@@ -99,14 +87,28 @@
         }
 
         .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-            url('{{ asset('images/hero-bg1.jpg') }}') no-repeat center center;
+            position: relative;
+             background: inherit;
+            color: inherit;
             background-size: cover;
             height: 70vh;
             display: flex;
             align-items: center;
             position: relative;
         }
+        .hero-section::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.33);
+        pointer-events: none;
+        z-index: 0;
+        }
+
+        .hero-section > * {
+        position: relative;
+        z-index: 1;
+}
 
         /* ... (keep all your existing CSS styles) ... */
     </style>
