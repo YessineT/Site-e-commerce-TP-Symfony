@@ -110,6 +110,30 @@ class GameRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countSearchResults(string $query, float $minPrice, float $maxPrice, int $minRating): int
+    {
+        $qb = $this->createQueryBuilder('g')
+            ->select('COUNT(g.id)');
+
+        if ($query) {
+            $qb->andWhere('g.title LIKE :query')
+                ->setParameter('query', '%' . $query . '%');
+        }
+
+        $qb->andWhere('g.price >= :minPrice')
+            ->andWhere('g.price <= :maxPrice')
+            ->setParameter('minPrice', $minPrice)
+            ->setParameter('maxPrice', $maxPrice);
+
+        if ($minRating > 0) {
+            $qb->andWhere('g.rating >= :minRating')
+                ->setParameter('minRating', $minRating);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+
     public function search(
         string $query = '',
         float $minPrice = 0,

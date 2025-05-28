@@ -33,7 +33,12 @@ final class SearchController extends AbstractController
             $limit // items per page
         );
 
-        $totalGames = $gameRepository->count([]);
+        $totalGames = $gameRepository->countSearchResults(
+            $query,
+            $minPrice,
+            $maxPrice,
+            $minRating
+        );
         $maxPage = ceil($totalGames / $limit);
 
         // AJAX request returns JSON
