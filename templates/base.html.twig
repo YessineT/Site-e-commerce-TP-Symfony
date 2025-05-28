@@ -155,14 +155,27 @@
 
 <!-- Footer -->
 <footer class="footer darker-bg" style="background-color: #040e19; color: white;">
-    <div class="container ">
+    <div class="container  ">
+        <div class="d-flex align-items-center mb-3">
+  <h4 class="mb-0 me-5">GameHub</h4>
+  <p class="text-light small mb-0">All brand names, logos, and related content are the property of their respective owners in Tunisia and other countries. The use of these trademarks does not imply any affiliation with or endorsement by them. Portions of the geospatial data displayed on this website are provided by   <a href="https://www.geonames.org" target="_blank" class="text-secondary text-decoration-none">geonames.org</a>
+ and are used under applicable terms and licenses.</p>
+</div>
         <div class="row justify-content-center ">
-            <div class="col-md-3">
-                <h4 class="mb-3">GameHub</h4>
-                <ul class="nav flex-column">
-                    <li class="nav-item mb-2"><a href="{{ path('app_about') }}" class="nav-link p-0 text-light">About Us</a></li>
-                    <li class="nav-item mb-2"><a href="{{ path('app_careers') }}" class="nav-link p-0 text-light">Careers</a></li>
-                    <li class="nav-item mb"><a href="{{ path('app_blog') }}" class="nav-link p-0 text-light">Blog</a></li>
+            <div class="col-auto ">
+                <ul class="nav justify-content-center align-items-center ">
+                
+                    <li class="nav-item">
+                        <a href="{{ path('app_about') }}" class="nav-link p-0 text-light">About Us</a>
+                    </li>
+                    <li class="px-2 text-light">|</li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_careers') }}" class="nav-link p-0 text-light">Careers</a>
+                    </li>
+                    <li class="px-2 text-light">|</li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_blog') }}" class="nav-link p-0 text-light">Blog</a>
+                    </li>
                 </ul>
             </div>
             <!-- ... (other footer columns) ... -->
