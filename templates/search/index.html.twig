@@ -35,16 +35,34 @@
 
                             <div class="filter-group">
                                 <span class="filter-group-title">Price Range</span>
+
                                 <div class="price-slider">
-                                    <input type="range" class="price-range" min="0" max="100"
-                                           value="{{ app.request.query.get('maxPrice', 100) }}" name="maxPrice" id="priceRange">
-                                           
-                                </div>
-                                <div class="price-inputs">
-                                    <input type="number" placeholder="Min" name="minPrice" value="{{ app.request.query.get('minPrice', 0) }}">
-                                    <input type="number" placeholder="Max" name="maxPrice" value="{{ app.request.query.get('maxPrice', 100) }}">
+                                    <!-- Sliders -->
+                                    <input type="range" id="minSlider" min="0" max="1000" value="{{ app.request.query.get('minPrice', 0) }}" step="10">
+                                    <input type="range" id="maxSlider" min="0" max="1000" value="{{ app.request.query.get('maxPrice', 1000) }}" step="10">
+
+                                    <!-- Display / Inputs -->
+                                    <div class="price-inputs">
+                                        <label>
+                                            Min:
+                                            <input type="number" name="minPrice" id="minInput" value="{{ app.request.query.get('minPrice', 0) }}" min="0" max="1000" step="10">
+                                        </label>
+                                        <label>
+                                            Max:
+                                            <input type="number" name="maxPrice" id="maxInput" value="{{ app.request.query.get('maxPrice', 1000) }}" min="0" max="1000" step="10">
+                                        </label>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="funny-scroll">
+                                        <span class="switch-slider"></span>
+                                        <span class="switch-label">Funny Scroll</span>
+                                        <label class="toggle-switch" title="Invert slider behavior when sliders cross">
+                                            <span class="info-icon">ℹ️</span>
+                                        </label>
+                                    </label>
                                 </div>
                             </div>
+
 
                             <div class="filter-group">
                                 <span class="filter-group-title">Rating</span>
@@ -267,5 +285,59 @@
             }
         });
     </script>
-   
+    <script>
+        const minSlider = document.getElementById("minSlider");
+        const maxSlider = document.getElementById("maxSlider");
+        const minInput = document.getElementById("minInput");
+        const maxInput = document.getElementById("maxInput");
+        const funnyScroll = document.getElementById("funny-scroll");
+
+        let j = 0;
+
+        function syncFromSlider(i) {
+            let min = parseInt(minSlider.value);
+            let max = parseInt(maxSlider.value);
+
+            if (max < min) {
+                if(i===j) {
+                    min = max;
+                    minSlider.value = min;
+                }
+                else if(i!==j) {
+                    max = min;
+                    maxSlider.value = max;
+                }
+            }
+
+            minInput.value = min;
+            maxInput.value = max;
+        }
+
+        function syncFromInput(i) {
+            let min = parseInt(minInput.value);
+            let max = parseInt(maxInput.value);
+
+            if (max < min) {
+                if(i===j) {
+                    min = max;
+                    minInput.value = min;
+                }
+                else if(i!==j) {
+                    max = min;
+                    maxInput.value = max;
+                }
+            }
+
+            minSlider.value = min;
+            maxSlider.value = max;
+        }
+
+        funnyScroll.addEventListener("change", () => j = 1-j);
+        minSlider.addEventListener("input", () => syncFromSlider(0));
+        maxSlider.addEventListener("input", () => syncFromSlider(1));
+        minInput.addEventListener("input", () => syncFromInput(0));
+        maxInput.addEventListener("input", () => syncFromInput(1));
+    </script>
+
+
 {% endblock %}
