@@ -107,38 +107,6 @@
 
 
 
-.bg-blue-dark {
-    background-color: #162b47; /* slightly lighter navy */
-    color: #f1f1f1; /* light text */
-}
-
-/* Override text colors inside the card */
-.bg-blue-dark .card-title,
-.bg-blue-dark .card-text {
-    color: #f1f1f1;
-}
-
-/* Star rating color */
-.bg-blue-dark .rating i {
-    color: #ffc107; /* golden star */
-}
-
-/* Price text color */
-.text-primary {
-    color: #4db8ff !important; /* lighter blue for emphasis */
-}
-
-/* Optional card hover effect */
-.bg-blue-dark.card:hover {
-    transform: scale(1.02);
-    transition: transform 0.2s ease;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-}
-
-
-
-
-
         /* ... (keep all your existing CSS styles) ... */
     </style>
     {% block stylesheets %}{% endblock %}
@@ -192,7 +160,7 @@
 {% block body %}{% endblock %}
 
 <!-- Footer -->
-<footer class="footer darker-bg" style="background-color: #040e19; color: white;">
+<footer class="footer darker-bg" style="background-color: #040e19; color: white; margin-bottom: 0; padding-bottom: 8px;">
     <div class="container  ">
         <div class="d-flex align-items-center mb-3">
   <h4 class="mb-0 me-5">GameHub</h4>
@@ -218,8 +186,8 @@
             </div>
             <!-- ... (other footer columns) ... -->
         </div>
-        <div class="border-top pt-4 mt-4 text-center">
-            <p class="text-light">© {{ "now"|date("Y") }} GameHub, Inc. All rights reserved.</p>
+        <div class="border-top pt-2 mt-3 mb-0 pb-0 text-center">
+            <p class="text-light  mb-0">© {{ "now"|date("Y") }} GameHub, Inc. All rights reserved.</p>
         </div>
     </div>
 </footer>
