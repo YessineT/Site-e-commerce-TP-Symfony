@@ -1,0 +1,102 @@
+{% extends 'adminbase.html.twig' %}
+
+{% block title %}Genre Management{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .table-responsive {
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+        .genre-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Genre Management</h1>
+            <a href="{{ path('app_genre_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Create New Genre
+            </a>
+        </div>
+        
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Slug</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for genre in genres %}
+                                <tr>
+                                    <td>{{ genre.id }}</td>
+                                    <td>{{ genre.name }}</td>
+                                    <td>{{ genre.slug }}</td>
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ path('app_genre_edit', {'id': genre.id}) }}"
+                                               class="btn btn-sm btn-outline-secondary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post"
+                                                  action="{{ path('app_genre_delete', {'id': genre.id}) }}"
+                                                  onsubmit="return confirm('Are you sure you want to delete this genre?');"
+                                                  style="display:inline;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ genre.id) }}">
+                                                <button class="btn btn-sm btn-outline-danger" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                            <a href="{{ path('app_game_crud_index', {'genre': genre.id}) }}"
+                                            class="btn btn-sm btn-outline-warning" title="View Games in Genre">
+                                                <i class="fas fa-gamepad"></i>
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        <i class="fas fa-tags fa-2x mb-2"></i><br>
+                                        No genres found.
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {# Pagination - uncomment if you're using KnpPaginatorBundle #}
+        {# 
+        <div class="d-flex justify-content-center mt-4">
+            {{ knp_pagination_render(genres) }}
+        </div>
+        #}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

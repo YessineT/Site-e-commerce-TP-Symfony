@@ -15,18 +15,48 @@
         <div class="card mb-4">
             <div class="card-body">
                 <form method="get" class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-md-2">
                         <input type="text" name="search" class="form-control" placeholder="Search games..." value="{{ app.request.query.get('search') }}">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
+                        <select name="genre" class="form-select">
+                            <option value="">All Genres</option>
+                            {% for genre in genres %}
+                                <option value="{{ genre.id }}" {{ app.request.query.get('genre') == genre.id ? 'selected' : '' }}>
+                                    {{ genre.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        {% for developer in developers %}
+                                <option value="{{ developer.id }}" {{ app.request.query.get('developer') == developer.id ? 'selected' : '' }}>
+                                    {{ developer.name }}
+                                </option>
+                            {% endfor %}
+                    </div>
+                    <div class="col-md-2">
+                        <select name="platform" class="form-select">
+                            <option value="">All Platforms</option>
+                            {% for platform in platforms %}
+                                <option value="{{ platform.id }}" {{ app.request.query.get('platform') == platform.id ? 'selected' : '' }}>
+                                    {{ platform.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
                         <select name="is_free" class="form-select">
                             <option value="">All Games</option>
                             <option value="1" {{ app.request.query.get('is_free') == '1' ? 'selected' : '' }}>Free Games</option>
                             <option value="0" {{ app.request.query.get('is_free') == '0' ? 'selected' : '' }}>Paid Games</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-1">
                         <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="{{ path('app_game_crud_index') }}" class="btn btn-outline-secondary w-100">Reset</a>
                     </div>
                 </form>
             </div>

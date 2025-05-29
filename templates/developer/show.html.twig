@@ -1,0 +1,398 @@
+{% extends 'adminbase.html.twig' %}
+
+{% block title %}{{ developer.name }} - Developer Profile{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .developer-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .profile-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        .info-value {
+            font-size: 1.1rem;
+            color: #212529;
+            margin-bottom: 1.5rem;
+        }
+        .action-buttons {
+            position: sticky;
+            top: 20px;
+        }
+        .btn-custom {
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            margin: 0.25rem;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            background: linear-gradient(45deg, #5a67d8, #6b46c1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        .btn-secondary-custom {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+        }
+        .btn-secondary-custom:hover {
+            background: linear-gradient(45deg, #5a6268, #3d4043);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+            color: white;
+        }
+        .btn-danger-custom {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            color: white;
+        }
+        .btn-danger-custom:hover {
+            background: linear-gradient(45deg, #c82333, #bd2130);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+            color: white;
+        }
+        .btn-success-custom {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+        }
+        .btn-success-custom:hover {
+            background: linear-gradient(45deg, #218838, #1ea080);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            color: white;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .description-text {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            line-height: 1.6;
+        }
+        .default-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .slug-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .website-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .website-link:hover {
+            background: linear-gradient(45deg, #5a67d8, #6b46c1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid py-4">
+        <!-- Developer Header -->
+        <div class="profile-header">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center">
+                    {% if developer.logo %}
+                        <img src="{{ asset('uploads/logos/' ~ developer.logo) }}" 
+                             class="developer-logo" 
+                             alt="{{ developer.name }} logo">
+                    {% else %}
+                        <div class="default-logo mx-auto">
+                            <i class="fas fa-code"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <h1 class="mb-2">{{ developer.name }}</h1>
+                    {% if developer.slug %}
+                        <div class="mb-3">
+                            <span class="slug-badge">
+                                <i class="fas fa-link me-1"></i>
+                                {{ developer.slug }}
+                            </span>
+                        </div>
+                    {% endif %}
+                    <div class="d-flex align-items-center flex-wrap">
+                        <small class="opacity-75">
+                            <i class="fas fa-hashtag me-1"></i>
+                            Developer ID: {{ developer.id }}
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="action-buttons">
+                        <a href="{{ path('app_developer_edit', {'id': developer.id}) }}" 
+                           class="btn btn-primary-custom btn-custom">
+                            <i class="fas fa-edit me-2"></i>Edit Developer
+                        </a>
+                        <a href="{{ path('app_developer_index') }}" 
+                           class="btn btn-secondary-custom btn-custom">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Developer Information -->
+            <div class="col-lg-8">
+                <div class="card profile-card mb-4">
+                    <div class="card-body p-4">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle me-2"></i>Developer Information
+                        </h3>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-label">Developer ID</div>
+                                <div class="info-value">
+                                    <span class="badge bg-primary">#{{ developer.id }}</span>
+                                </div>
+                                
+                                <div class="info-label">Developer Name</div>
+                                <div class="info-value">
+                                    <i class="fas fa-user-tie me-2 text-muted"></i>
+                                    {{ developer.name }}
+                                </div>
+                                
+                                <div class="info-label">URL Slug</div>
+                                <div class="info-value">
+                                    {% if developer.slug %}
+                                        <i class="fas fa-link me-2 text-muted"></i>
+                                        <code>{{ developer.slug }}</code>
+                                    {% else %}
+                                        <span class="text-muted fst-italic">Not set</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="info-label">Website</div>
+                                <div class="info-value">
+                                    {% if developer.website %}
+                                        <a href="{{ developer.website starts with('http') ? developer.website : 'https://' ~ developer.website }}"
+                                           title="{{ developer.website }}" 
+                                           target="_blank" 
+                                           class="website-link">
+                                            <i class="fas fa-globe me-2"></i>
+                                            Visit Website
+                                            <i class="fas fa-external-link-alt ms-2"></i>
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted fst-italic">No website provided</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="info-label">Logo Status</div>
+                                <div class="info-value">
+                                    {% if developer.logo %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Logo Available
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>No Logo
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if developer.description %}
+                            <div class="info-label">Description</div>
+                            <div class="description-text">
+                                <i class="fas fa-quote-left me-2"></i>
+                                {{ developer.description|nl2br }}
+                            </div>
+                        {% else %}
+                            <div class="info-label">Description</div>
+                            <div class="description-text text-muted fst-italic">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No description provided for this developer.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions & Stats -->
+            <div class="col-lg-4">
+
+                <div class="stats-card mb-4">
+                    <span class="stats-number">{{ developer.id }}</span>
+                    <span class="stats-label">Developer ID</span>
+                </div>
+
+                <div class="card profile-card">
+                    <div class="card-body p-4">
+                        <h3 class="section-title">
+                            <i class="fas fa-shield-alt me-2"></i>Developer Status
+                        </h3>
+                        
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="info-label mb-0">Profile Status</span>
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle me-1"></i>Active
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="info-label mb-0">Website Link</span>
+                            <span class="badge {{ developer.website ? 'bg-success' : 'bg-warning' }}">
+                                <i class="fas {{ developer.website ? 'fa-link' : 'fa-unlink' }} me-1"></i>
+                                {{ developer.website ? 'Available' : 'Missing' }}
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="info-label mb-0">Logo Status</span>
+                            <span class="badge {{ developer.logo ? 'bg-success' : 'bg-secondary' }}">
+                                <i class="fas {{ developer.logo ? 'fa-image' : 'fa-image' }} me-1"></i>
+                                {{ developer.logo ? 'Uploaded' : 'Default' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Add smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on page load
+            const cards = document.querySelectorAll('.profile-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Animate stats card
+            const statsCard = document.querySelector('.stats-card');
+            if (statsCard) {
+                statsCard.style.opacity = '0';
+                statsCard.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    statsCard.style.transition = 'all 0.6s ease';
+                    statsCard.style.opacity = '1';
+                    statsCard.style.transform = 'scale(1)';
+                }, 300);
+            }
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Show success message (you can customize this)
+                const button = event.target.closest('button');
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check me-2"></i>Copied!';
+                button.classList.remove('btn-outline-info');
+                button.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-outline-info');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
+{% endblock %}

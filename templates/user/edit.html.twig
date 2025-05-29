@@ -1,13 +1,51 @@
-{% extends 'base.html.twig' %}
+{# templates/user/new.html.twig #}
+{% extends 'adminbase.html.twig' %}
 
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
+    <div class="container py-5" style="background-color: #121212; min-height: 100vh;">
+        <div class="text-center mb-5">
+            <h1 class="text-white display-4 fw-bold">Edit User</h1>
+        </div>
 
-    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {{ include('user/_form.html.twig') }}
+                
+                <div class="d-flex justify-content-center mt-4">
+                    <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i> Back to list
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .bg-darker {
+            background-color: #1a1a1a;
+            border-color: #2a2a2a;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #1a1a1a;
+            color: white;
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        }
+        .form-check-input:checked {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+        }
+        .card-header {
+            border-bottom: 1px solid #2a2a2a;
+        }
+    </style>
 {% endblock %}
