@@ -15,6 +15,12 @@
                     {{ total|number_format(2, '.', ',') }} $
                 </span>
             </h4>
+            {% if app.user and items|length > 0 %}
+                <a href="{{ path('cart_checkout') }}" class="btn btn-success">
+                    💳 Pay Now
+                </a>
+            {% endif %}
+
         </div>
         </div>
     </section>

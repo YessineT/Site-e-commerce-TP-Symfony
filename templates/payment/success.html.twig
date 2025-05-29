@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement réussi{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="card shadow-lg border-0 p-4 text-center">
+            <h1 class="text-success mb-4">✅ Paiement confirmé</h1>
+            <p class="lead mb-3">Merci pour votre achat !</p>
+
+            <div class="my-4">
+                <h5>📦 Détails de la commande</h5>
+                <ul class="list-group list-group-flush text-start d-inline-block">
+                    <li class="list-group-item">
+                        <strong>ID de commande :</strong> #{{ order.id }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Statut :</strong> {{ order.status|capitalize }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Date :</strong> {{ order.orderDate ? order.orderDate|date('d/m/Y H:i') : 'N/A' }}
+                    </li>
+                </ul>
+            </div>
+
+            <a href="{{ path('app_home') }}" class="btn btn-primary mt-4">
+                Retour à l'accueil
+            </a>
+        </div>
+    </div>
+{% endblock %}

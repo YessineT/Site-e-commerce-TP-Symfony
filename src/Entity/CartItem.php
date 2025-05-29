@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Entity\Game;
 
@@ -24,6 +25,10 @@ class CartItem
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(targetEntity: Cart::class, inversedBy: 'cartItems')]
+    #[ORM\JoinColumn(name: "cart_id", referencedColumnName: "id", nullable: false)]
+    private ?Cart $cart = null;
 
     public function getId(): ?int
     {
@@ -64,5 +69,14 @@ class CartItem
 
         return $this;
     }
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
 
+    public function setCart(?Cart $cart): static
+    {
+        $this->cart = $cart;
+        return $this;
+    }
 }

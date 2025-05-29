@@ -71,10 +71,15 @@
                                     <strong>${{ (cart.total * 1.1)|number_format(2) }}</strong>
                                 </div>
 
-                                {% if app.user %}
-                                    <a href="{{ path('app_checkout') }}" class="btn btn-primary w-100 mb-3">Proceed to Checkout</a>
-                                {% else %}
-                                    <div class="alert alert-info mb-3">
+                                {% if app.user and lastOrderId is defined %}
+                                    <a href="{{ path('app_checkout', { id: lastOrderId }) }}" class="btn btn-success w-100 mb-3">
+                                        {{ dump(lastOrderId) }}
+                                        {{ dump(app.user.id) }}
+                                        💳 Pay Now
+                                    </a>
+                                {% endif %}
+
+                                <div class="alert alert-info mb-3">
                                         <a href="{{ path('app_login') }}" class="alert-link">Sign in</a> to proceed to checkout
                                     </div>
                                     <a href="{{ path('app_register') }}" class="btn btn-outline-light w-100">Create Account</a>

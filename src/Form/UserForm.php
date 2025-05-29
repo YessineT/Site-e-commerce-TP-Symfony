@@ -95,7 +95,6 @@ class UserForm extends AbstractType
                 'choices' => [
                     'User' => 'ROLE_USER',
                     'Admin' => 'ROLE_ADMIN',
-                    'Super Admin' => 'ROLE_SUPER_ADMIN'
                 ],
                 'multiple' => true,
                 'expanded' => true,
@@ -105,20 +104,6 @@ class UserForm extends AbstractType
                 'label' => 'Account Verified',
                 'required' => false,
                 'help' => 'Check if the user account is verified'
-            ])
-            ->add('wishlist', EntityType::class, [
-                'class' => Game::class,
-                'choice_label' => function(Game $game) {
-                    return $game->getTitle() ?? 'Game #' . $game->getId();
-                },
-                'multiple' => true,
-                'expanded' => false,
-                'required' => false,
-                'label' => 'Wishlist Games',
-                'attr' => [
-                    'class' => 'select2-multiple',
-                    'data-placeholder' => 'Select games for wishlist'
-                ]
             ]);
 
         // Only add password field for new users or when explicitly requested

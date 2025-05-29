@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
+use App\Entity\Order;
+use App\Repository\CartRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,26 +33,48 @@ final class CartController extends AbstractController
     }
 
     #[Route('/cart/add/{id}', name: 'cart_add')]
-    public function add(Game $game, CartItemRepository $repo, EntityManagerInterface $em): Response
-    {
+    public function add(
+        Game $game,
+        CartItemRepository $repo,
+        CartRepository $cartRepo,
+        EntityManagerInterface $em
+    ): Response {
         $user = $this->getUser();
         if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $item = $repo->findOneBy(['user'=>$user, 'game'=>$game]);
+        // 1) Récupérer ou créer le panier
+        $cart = $cartRepo->findOneBy(['userId' => $user->getId()]);
+        if (!$cart) {
+            $cart = new Cart($user->getId());
+            $em->persist($cart);
+        }
+
+        // 2) Récupérer ou créer le CartItem
+        $item = $repo->findOneBy([
+            'cart' => $cart,
+            'game' => $game,
+        ]);
+
         if ($item) {
-            $item->setQuantity($item->getQuantity()+1);
+            $item->setQuantity($item->getQuantity() + 1);
         } else {
             $item = new CartItem();
-            $item->setGame($game)
+            $item
+                ->setGame($game)
                 ->setUser($user)
-                ->setQuantity(1);
+                ->setQuantity(1)
+                ->setCart($cart);    // **IMPORTANT** : on lie le Cart
             $em->persist($item);
         }
+
+        // 3) Flush unique
         $em->flush();
+
         return $this->redirectToRoute('app_cart');
     }
+
 
     #[Route('/cart/update/{id}', name: 'cart_update', methods: ['POST'])]
     public function update(Request $request, CartItem $item, EntityManagerInterface $em): Response
@@ -120,5 +145,32 @@ final class CartController extends AbstractController
         ));
 
         return $this->redirectToRoute('app_cart');
+    }
+    #[Route('/cart/checkout', name: 'cart_checkout')]
+    public function createOrderAndRedirect(
+        CartItemRepository $cartRepo,
+        EntityManagerInterface $em
+    ): Response {
+        $user = $this->getUser();
+        $items = $cartRepo->findBy(['user' => $user]);
+
+        if (count($items) === 0) {
+            $this->addFlash('warning', 'Votre panier est vide.');
+            return $this->redirectToRoute('app_cart');
+        }
+
+        // Créer une commande
+        $order = new \App\Entity\Order();
+        $order->setUserId($user->getId());
+        $order->setOrderDate(new \DateTime());
+        $order->setStatus('pending');
+        $order->setPaymentId(0);
+        $total = array_reduce($items, fn($sum, $i) => $sum + $i->getGame()->getPrice(), 0);
+        $order->setTotalPrice($total);
+
+        $em->persist($order);
+        $em->flush();
+
+        return $this->redirectToRoute('app_checkout', ['id' => $order->getId()]);
     }
 }

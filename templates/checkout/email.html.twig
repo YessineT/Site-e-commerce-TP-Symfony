@@ -1,0 +1,44 @@
+{# templates/checkout/email.html.twig #}
+
+<h2>🎮 Merci pour votre achat sur GameHub !</h2>
+
+<p>Voici le récapitulatif de votre commande <strong>#{{ order.id }}</strong> passée le {{ order.orderDate|date('d/m/Y H:i') }} :</p>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="8" style="border-collapse: collapse;">
+    <thead style="background-color: #f8f9fa;">
+    <tr>
+        <th align="left">Jeu</th>
+        <th align="right">Prix</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td>{{ item.game.title }}</td>
+            <td align="right">{{ item.game.price|number_format(2, '.', ',') }} €</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td><strong>Sous-total</strong></td>
+        <td align="right">{{ total|number_format(2, '.', ',') }} €</td>
+    </tr>
+    <tr>
+        <td>TVA (10%)</td>
+        <td align="right">{{ tax|number_format(2, '.', ',') }} €</td>
+    </tr>
+    <tr>
+        <td><strong>Total TTC</strong></td>
+        <td align="right"><strong>{{ totalTTC|number_format(2, '.', ',') }} €</strong></td>
+    </tr>
+    </tfoot>
+</table>
+
+<p style="margin-top: 20px;">
+    Vos jeux sont désormais disponibles dans votre bibliothèque. Bon jeu ! 🎉
+</p>
+
+<p>
+    — L’équipe GameHub
+</p>
