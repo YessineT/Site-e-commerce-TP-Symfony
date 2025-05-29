@@ -3,8 +3,10 @@
 {% block title %}Hello SearchController!{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/store.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/darkblue.css') }}">
+
     <link rel="stylesheet" href="{{ asset('css/search.css') }}"
+
 {% endblock %}
 
 {% block body %}
@@ -15,7 +17,7 @@
         </div>
     </section>
 
-    <section class="py-5">
+    <section class="py-5 ">
         <div class="container">
             <div class="row">
                 <!-- Filter Column -->
@@ -35,7 +37,8 @@
                                 <span class="filter-group-title">Price Range</span>
                                 <div class="price-slider">
                                     <input type="range" class="price-range" min="0" max="100"
-                                           value="{{ app.request.query.get('maxPrice', 100) }}" name="maxPrice">
+                                           value="{{ app.request.query.get('maxPrice', 100) }}" name="maxPrice" id="priceRange">
+                                           
                                 </div>
                                 <div class="price-inputs">
                                     <input type="number" placeholder="Min" name="minPrice" value="{{ app.request.query.get('minPrice', 0) }}">
@@ -264,4 +267,5 @@
             }
         });
     </script>
+   
 {% endblock %}
