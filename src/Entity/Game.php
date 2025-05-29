@@ -116,6 +116,9 @@ class Game
         $this->screenshots = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->downloads = new ArrayCollection();
+        if ($this->releaseDate === null) {
+            $this->releaseDate = new \DateTime(); // optional, only if you want a default right away
+        }
     }
 
     public function getAverageRating(): float

@@ -3,18 +3,23 @@
 {% block title %}Your Game Library - GameHub{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/library.css') }}">
+    {{ parent() }}
+    {# Add only page-specific CSS here #}
+    {# <link rel="stylesheet" href="{{ asset('css/library.css') }}"> #}
+    <link rel="stylesheet" href="{{ asset('css/darkblue.css') }}">
+
 {% endblock %}
 
 {% block body %}
-<section class="py-5 bg-dark text-white">
+
+<section class="py-5 darker-bg text-white">
     <div class="container">
         <h1 class="display-5 fw-bold mb-4">Your Game Library</h1>
         <p class="lead">Browse all the games you own in one place. Ready to play?</p>
     </div>
 </section>
 
-<section class="py-5">
+<section class="py-5 bg-dark-blue">
     <div class="container">
         {% if libraryGames is empty %}
             <div class="alert alert-info text-center">
@@ -24,7 +29,7 @@
             <div class="row">
                 {% for game in libraryGames %}
                     <div class="col-md-4 mb-4">
-                        <div class="card game-card h-100">
+                        <div class="card game-card h-100 bg-blue-dark">
                             <img src="{{ asset('uploads/games/' ~ game.game.thumbnail) }}" class="card-img-top" alt="{{ game.game.title }}">
                             <div class="card-body">
                                <h5 class="card-title text-uppercase fw-bold mb-2">{{ game.game.title }}</h5>
@@ -39,9 +44,9 @@
                                         <p class="mb-0"><strong>Hours Played:</strong> {{ game.hoursPlayed }} hrs</p>
                                     </div>
                                     <div>
-                                       <button class="btn btn-success">Play</button>
-                                       <a href="{{ path('app_download') }}" class="btn btn-outline-primary">Download</a>
-                                    </div>
+  <button class="btn btn-success rounded-pill px-4">Play</button>
+  <a href="{{ path('app_download') }}" class="btn btn-outline-primary rounded-pill ms-2">Download</a>
+</div>
                                 </div>
                             </div>
                         </div>

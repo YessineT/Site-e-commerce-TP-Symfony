@@ -8,16 +8,17 @@
 {% endblock %}
 
 {% block body %}
-    <section class="py-5 bg-dark text-white">
+    <link rel="stylesheet" href="{{ asset('css/darkblue.css') }}">
+    <section class="py-5 darker-bg text-white">
         <div class="container">
             <h1 class="display-5 fw-bold mb-4">Welcome to the GameHub Store</h1>
             <p class="lead">Browse our collection of games and accessories. Find your next adventure!</p>
         </div>
     </section>
 
-    <section class="py-5">
-        <div class="container px-4">
-            <div class="row g-4" id="games-container">
+    <section class="py-5 bg-dark-blue">
+        <div class="container px-4 ">
+            <div class="row g-4 bg-blue-dark" id="games-container">
                 {% include 'store/nextPage.html.twig' %}
             </div>
             <div id="loading-spinner" class="text-center">

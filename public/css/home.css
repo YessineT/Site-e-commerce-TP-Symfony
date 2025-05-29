@@ -1,11 +1,7 @@
 /* home.css */
 
 /* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-}
+
 
 /* Hero Section */
 body {
@@ -23,13 +19,12 @@ body {
 }
 
 /* Dark background for footer */
-footer {
-    background-color: #1a1a1a; /* Dark footer */
-    color: white;
-    padding: 40px 0;
-    text-align: center;
+
+ .hero-section .btn-outline-light:hover {
+    color: #0d6efd !important;
+    background-color: #fff;
+    border-color: #0d6efd;
 }
- 
 .hero-section .container {
     position: relative;
     z-index: 2;
@@ -59,9 +54,10 @@ footer {
 }
 
 .hero-section .btn-outline-light {
-    border-color: #ffffff;
-    color: #ffffff;
+    border-color: #ffffff !important;
+    color: #fff;
 }
+
 
 /* Featured Games Section */
 .section-title {
@@ -215,4 +211,13 @@ footer {
     transform: translateY(-10px);
     transition: all 0.5s ease-out;
 }
+
+.free-games-section {
+    background: inherit; /* inherit body background */
+}
+
+
+
+
+
 

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .stat-card { transition: transform 0.3s; }
+    .stat-card:hover { transform: translateY(-5px); }
+</style>
+<div class="container mb-5">
+    <div class="example-wrapper">
+        <h1 class="text-center my-5 display-4 fw-bold">
+                Welcome to the <span class="text-primary">Administrator</span> Dashboard
+        </h1>
+        <p class="text-center mb-5">
+            Manage your platform's content, users, and settings
+        </p>
+    </div>
+
+    <!-- Management Cards (Centered) -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-5 mb-4">
+            <div class="card h-100 shadow-sm stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">User Management</h5>
+                    <p class="card-text">Manage all registered users and permissions</p>
+                    <a href="{{ path('app_user_index') }}" class="btn btn-outline-primary">Go to Users</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-5 mb-4">
+            <div class="card h-100 shadow-sm stat-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-newspaper fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Content Management</h5>
+                    <p class="card-text">Edit and manage all platform content</p>
+                    <a href="{{ path('app_game_crud_index') }}" class="btn btn-outline-primary">Manage Content</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+{% endblock %}
