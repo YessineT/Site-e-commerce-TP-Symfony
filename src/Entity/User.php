@@ -100,6 +100,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
+    public function getAvatarFile(): ?File
+    {
+        return $this->avatarFile;
+    }
+    
     public function setAvatarFile(?File $avatarFile = null): void
     {
         $this->avatarFile = $avatarFile;

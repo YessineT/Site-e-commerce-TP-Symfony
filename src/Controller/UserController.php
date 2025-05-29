@@ -6,17 +6,29 @@ use App\Entity\User;
 use App\Form\UserForm;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Doctrine\Common\Collections\ArrayCollection;
+
 
 #[IsGranted('ROLE_ADMIN')]
 #[Route('/admin/user')]
 final class UserController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ) {
+        $this->entityManager = $entityManager;
+        $this->passwordHasher = $passwordHasher;
+    }
     #[Route(name: 'app_user_index', methods: ['GET'])]
     public function index(Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response
     {
