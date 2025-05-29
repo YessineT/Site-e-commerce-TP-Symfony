@@ -39,6 +39,7 @@ security:
                 always_remember_me: false
 
     access_control:
+        - { path: ^/checkout, roles: ROLE_USER }
         - { path: ^/cart, roles: [ROLE_USER, ROLE_ADMIN] }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/signup, roles: PUBLIC_ACCESS }

@@ -3,11 +3,17 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+#    session: true
 
     #esi: true
     #fragments: true
-
+    session:
+        handler_id: null
+        cookie_secure: auto       # Use HTTPS automatically if detected
+        cookie_samesite: null     # Disable SameSite to allow cookies via ngrok (for dev only!)
+        cookie_domain: ~          # Use default domain
+    trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-host']
 when@test:
     framework:
         test: true

@@ -1,0 +1,224 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Checkout – GameHub{% endblock %}
+
+{% block body %}
+{#    <style>#}
+{#        /* animation légère au hover sur les cartes */#}
+{#        .card:hover {#}
+{#            transform: scale(1.01);#}
+{#            transition: transform 0.2s ease-in-out;#}
+{#        }#}
+{#    </style>#}
+    <style>
+        .animatable:hover {
+            transform: scale(1.01);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* champ actif (focus) */
+        .checkout-form .form-control:focus {
+            transform: scale(1.02);
+            transition: transform 0.2s ease-in-out;
+            border-color: #536dfe;        /* renforce la couleur au focus */
+            box-shadow: 0 0 0 .2rem rgba(83,109,254,.25);
+        }
+    </style>
+    <style>
+        /* === Style spécifique au formulaire de checkout === */
+        .checkout-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem 2rem;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkout-form .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkout-form .form-group label {
+            font-weight: 600;
+            margin-bottom: .25rem;
+        }
+
+        .checkout-form .form-control {
+            width: 100%;
+            padding: .75rem;
+            border-radius: .5rem;
+            border: 1px solid #ced4da;
+            transition: border-color .2s ease;
+        }
+
+        .checkout-form .form-control:focus {
+            border-color: #536dfe;
+            outline: none;
+            box-shadow: 0 0 0 .2rem rgba(83,109,254,.25);
+        }
+    </style>
+
+    <div class="container py-5">
+        <h1 class="mb-4 text-center fw-bold">🛒 Finalisez votre commande</h1>
+        <div class="row">
+            <div class="col-lg-7 mb-4">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">🧾 Informations de facturation</h5>
+                    </div>
+                    <div class="card-body p-4">
+
+                        {{ form_start(checkoutForm, {attr: {class: 'checkout-form'}}) }}
+
+                        <div class="form-group">
+                            {{ form_label(checkoutForm.firstName) }}
+                            {{ form_widget(checkoutForm.firstName, {attr: {'class': 'form-control'}}) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(checkoutForm.lastName) }}
+                            {{ form_widget(checkoutForm.lastName, {attr: {'class': 'form-control'}}) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(checkoutForm.email) }}
+                            {{ form_widget(checkoutForm.email, {attr: {'class': 'form-control'}}) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(checkoutForm.phone) }}
+                            {{ form_widget(checkoutForm.phone, {attr: {'class': 'form-control'}}) }}
+                        </div>
+
+{#                        <div class="form-group">#}
+{#                            {{ form_label(checkoutForm.address) }}#}
+{#                            {{ form_widget(checkoutForm.address, {attr: {'class': 'form-control'}}) }}#}
+{#                        </div>#}
+
+                        <div class="form-group">
+                            {{ form_label(checkoutForm.country) }}
+                            {{ form_widget(checkoutForm.country, {attr: {'class': 'form-control'}}) }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(checkoutForm.city) }}
+                            {{ form_widget(checkoutForm.city, {attr: {'class': 'form-control'}}) }}
+                        </div>
+
+{#                        <div class="form-group">#}
+{#                            {{ form_label(checkoutForm.zipCode) }}#}
+{#                            {{ form_widget(checkoutForm.zipCode, {attr: {'class': 'form-control'}}) }}#}
+{#                        </div>#}
+
+                        <div class="form-group" style="grid-column: 1 / -1">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                ✅ Enregistrer mes informations
+                            </button>
+                        </div>
+
+                        {{ form_end(checkoutForm) }}
+
+                    </div>
+                </div>
+            </div>
+
+            {# … bloc parent, en-tête, etc. … #}
+
+            <div class="col-lg-5">
+                {# === RÉCAPITULATIF DE LA COMMANDE === #}
+                <div class="card shadow border-0 mb-4 animatable">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">🧾 Récapitulatif de la commande</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for item in cart.items %}
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>{{ item.game.title }}</span>
+                                <span>{{ item.game.price|number_format(2, '.', ',') }} €</span>
+                            </div>
+                        {% endfor %}
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between">
+                            <span>Sous-total</span>
+                            <span>{{ cart.total|number_format(2, '.', ',') }} €</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>TVA (10%)</span>
+                            <span>{{ (cart.total * 0.1)|number_format(2, '.', ',') }} €</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between fs-5 fw-bold text-success">
+                            <span>Total TTC</span>
+                            <span>{{ (cart.total * 1.1)|number_format(2, '.', ',') }} €</span>
+                        </div>
+                    </div>
+                </div>
+
+                {# === PAIEMENT SÉCURISÉ === #}
+                <div class="card shadow border-0 animatable">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">💳 Paiement sécurisé</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-3">Vos jeux seront disponibles immédiatement après paiement.</p>
+                        {# ADD the PayPal button container #}
+                        <div id="paypal-button-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Script paypall #}
+        {# 1. Load the PayPal JS SDK with Fastlane component #}
+        <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=EUR"></script>
+        <script>
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return fetch('/paypal/order/create/{{ order.id }}', {
+                        method: 'POST'
+                    }).then(function(res) {
+                        if (!res.ok) {
+                            throw new Error('Failed to create PayPal order');
+                        }
+                        return res.json();
+                    }).then(function(data) {
+                        if (data.error) {
+                            console.error('PayPal Error:', data.error);
+                            alert('Une erreur est survenue lors de la création de la commande PayPal.');
+                            throw new Error(data.error);
+                        }
+                        return data.id;
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return fetch('/paypal/order/capture/' + data.orderID, {
+                        method: 'POST'
+                    }).then(function(res) {
+                        if (!res.ok) {
+                            throw new Error('Failed to capture PayPal order');
+                        }
+                        return res.json();
+                    }).then(function(details) {
+                        if (details.status === 'success') {
+                            window.location.href = '/payment/success/{{ order.id }}';
+                        } else {
+                            alert('Échec de la capture du paiement.');
+                        }
+                    }).catch(function(error) {
+                        console.error('Capture Error:', error);
+                        alert('Une erreur est survenue lors de la capture du paiement.');
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal SDK Error:', err);
+                    alert('Une erreur est survenue avec PayPal.');
+                }
+            }).render('#paypal-button-container');
+        </script>
+    </div>
+{% endblock %}
