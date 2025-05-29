@@ -143,12 +143,12 @@
             </ul>
             {% endif %}
             <div class="ms-auto">
-                <a href="{{ path('app_search') }}" class="btn btn-outline-light border-0 me-2"><i class="fas fa-search"></i></a>
+                <a href="{{ path('app_search') }}" class="btn btn-outline-light rounded-pill border-0 me-2"><i class="fas fa-search"></i></a>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_admin') }}" class="btn btn-secondary me-2">Dashboard</a>
+                    <a href="{{ path('app_admin') }}" class="btn btn-secondary me-2 px-4 rounded-pill">Dashboard</a>
                 {% endif %}
                 {% if app.user %}
-                  <a href="{{ path('app_logout') }}" class="btn btn-primary me-2">Logout</a>
+                  <a href="{{ path('app_logout') }}" class="btn btn-primary rounded-pill me-2 px-4">Logout</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="btn btn-primary me-2">Sign In</a>
                 {% endif %}
