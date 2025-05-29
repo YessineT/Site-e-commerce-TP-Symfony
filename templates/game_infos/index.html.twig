@@ -137,11 +137,17 @@
                         <div class="card price-card mt-0"> <!-- Removed mt-4 since we have mb-4 above -->
                             <div class="card-body text-center">
                                 <h3 class="game-price">${{ game.price|number_format(2) }}</h3>
-                                <button class="btn btn-primary btn-lg w-100 mt-3">
-                                    <a href="{{ path('cart_add', { 'id': game.id }) }}" class="text-white" style="text-decoration: none;">
-                                        <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                {% if game.id not in libraryGameIds and game.id not in cartGameIds %}
+                                    <a href="{{ path('cart_add', { 'id': game.id }) }}" 
+                                    class="btn btn-primary btn-lg w-100 mt-3"
+                                    onclick="this.classList.add('disabled'); this.innerHTML = '<span class=\'spinner-border spinner-border-sm me-2\'></span>Adding...';">
+                                        <i class="fas fa-shopping-cart me-2"></i> Add to Cart
                                     </a>
-                                </button>
+                                {% elseif game.id in cartGameIds %}
+                                    <div class="alert alert-info text-center mt-3">Already in your cart</div>
+                                {% else %}
+                                    <div class="alert alert-success text-center mt-3">Already in your library</div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
