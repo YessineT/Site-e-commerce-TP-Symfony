@@ -38,18 +38,18 @@
 
                                 <div class="price-slider">
                                     <!-- Sliders -->
-                                    <input type="range" id="minSlider" min="0" max="1000" value="{{ app.request.query.get('minPrice', 0) }}" step="10">
-                                    <input type="range" id="maxSlider" min="0" max="1000" value="{{ app.request.query.get('maxPrice', 1000) }}" step="10">
+                                    <input type="range" id="minSlider" min="0" max="1000" value="{{ app.request.query.get('minPrice', 0) }}">
+                                    <input type="range" id="maxSlider" min="0" max="1000" value="{{ app.request.query.get('maxPrice', 1000) }}">
 
                                     <!-- Display / Inputs -->
                                     <div class="price-inputs">
                                         <label>
                                             Min:
-                                            <input type="number" name="minPrice" id="minInput" value="{{ app.request.query.get('minPrice', 0) }}" min="0" max="1000" step="10">
+                                            <input type="number" name="minPrice" id="minInput" value="{{ app.request.query.get('minPrice', 0) }}" min="0" max="1000">
                                         </label>
                                         <label>
                                             Max:
-                                            <input type="number" name="maxPrice" id="maxInput" value="{{ app.request.query.get('maxPrice', 1000) }}" min="0" max="1000" step="10">
+                                            <input type="number" name="maxPrice" id="maxInput" value="{{ app.request.query.get('maxPrice', 1000) }}" min="0" max="1000">
                                         </label>
                                     </div>
                                     <label class="toggle-switch">

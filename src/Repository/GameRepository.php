@@ -152,10 +152,6 @@ class GameRepository extends ServiceEntityRepository
                 ->setParameter('query', '%' . $query . '%');
         }
 
-        // Pagination
-        $qb->setFirstResult(($page - 1) * $limit)
-            ->setMaxResults($limit);
-
         $result = array_filter($qb->getQuery()->getResult(), function ($item) use ($minRating) {
             return $item->getAverageRating() >= $minRating;
         });
@@ -185,7 +181,7 @@ class GameRepository extends ServiceEntityRepository
 
         usort($result, $sortfunc);
 
-        return $result;
+        return array_slice($result, ($page - 1)*$limit, $limit);
     }
 
 
