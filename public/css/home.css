@@ -20,7 +20,11 @@ body {
 
 /* Dark background for footer */
 
- 
+ .hero-section .btn-outline-light:hover {
+    color: #0d6efd !important;
+    background-color: #fff;
+    border-color: #0d6efd;
+}
 .hero-section .container {
     position: relative;
     z-index: 2;
@@ -51,8 +55,9 @@ body {
 
 .hero-section .btn-outline-light {
     border-color: #ffffff !important;
-    color: #ffffff !important;
+    color: #fff;
 }
+
 
 /* Featured Games Section */
 .section-title {
