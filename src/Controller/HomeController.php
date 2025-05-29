@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\NewsRepository;
 use App\Repository\GameRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
-    public function index(GameRepository $gameRepository): Response
+    public function index(GameRepository $gameRepository, NewsRepository $newsRepository): Response
     {
         $featuredGames = $gameRepository->findPopularGames(6);
 
@@ -27,7 +28,7 @@ final class HomeController extends AbstractController
         // Get free games
         $freeGames = $gameRepository->findFreeGames(3);
 
-        $latestNews = $gameRepository->findPopularGames(3);
+        $latestNews = $newsRepository->findBy([], ['createdAt' => 'DESC'], 3);
 
         return $this->render('home/index.html.twig', [
             'featuredGames' => $featuredGames,
