@@ -32,9 +32,11 @@
                     </div>
                     <div class="col-md-2">
                         {% for developer in developers %}
+                            <select name="developer" class="form-select">
                                 <option value="{{ developer.id }}" {{ app.request.query.get('developer') == developer.id ? 'selected' : '' }}>
                                     {{ developer.name }}
                                 </option>
+                            </select>
                             {% endfor %}
                     </div>
                     <div class="col-md-2">
