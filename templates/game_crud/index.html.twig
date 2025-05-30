@@ -31,13 +31,13 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        {% for developer in developers %}
-                            <select name="developer" class="form-select">
-                                <option value="{{ developer.id }}" {{ app.request.query.get('developer') == developer.id ? 'selected' : '' }}>
-                                    {{ developer.name }}
-                                </option>
-                            </select>
+                        <select name="developer" class="form-select">
+                            {% for developer in developers %}
+                                    <option value="{{ developer.id }}" {{ app.request.query.get('developer') == developer.id ? 'selected' : '' }}>
+                                        {{ developer.name }}
+                                    </option>
                             {% endfor %}
+                        </select>
                     </div>
                     <div class="col-md-2">
                         <select name="platform" class="form-select">
