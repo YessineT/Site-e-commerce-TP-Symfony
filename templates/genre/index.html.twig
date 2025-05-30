@@ -3,6 +3,7 @@
 {% block title %}Genre Management{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
+    
     <style>
         .table-responsive {
             padding: 20px;
@@ -24,6 +25,8 @@
 {% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" href="{{ asset('css/darkblue.css') }}">
+
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between flex-wrap mb-4">
             <h1>Genre Management</h1>
@@ -32,7 +35,7 @@
             </a>
         </div>
         
-        <div class="card shadow-sm">
+        <div class="card shadow-sm bg-blue-dark btn-blue-dark">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped align-middle">

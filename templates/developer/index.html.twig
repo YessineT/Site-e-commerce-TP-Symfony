@@ -4,6 +4,8 @@
 
 {% block stylesheets %}
     {{ parent() }}
+        <link rel="stylesheet" href="{{ asset('css/darkblue.css') }}">
+
     <style>
         .developer-logo {
             width: 40px;
@@ -30,7 +32,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-4 ">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Developer Management</h1>
             <a href="{{ path('app_developer_new') }}" class="btn btn-primary">
@@ -39,7 +41,7 @@
         </div>
         
         {# Search and Filter Section #}
-        <div class="card mb-4">
+        <div class="card mb-4 bg-blue-dark">
             <div class="card-body">
                 <form method="get" class="row g-3">
                     <div class="col-md-6">
@@ -58,7 +60,7 @@
                 </form>
             </div>
         </div>
-        <div class="card shadow-sm">
+        <div class="card shadow-sm bg-blue-dark">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped align-middle">
@@ -147,7 +149,7 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center mt-4 ">
             {{ knp_pagination_render(pagination) }}
         </div>
     </div>
