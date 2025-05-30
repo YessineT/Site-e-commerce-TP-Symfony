@@ -2,25 +2,30 @@
 
 namespace App\Entity;
 
-use App\Repository\GameRepository;
+use App\Repository\GameAverageRatingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: GameRepository::class)]
-#[Vich\Uploadable]
-class Game
+#[ORM\Entity(repositoryClass: GameAverageRatingRepository::class)]
+class GameAverageRatings
 {
-    #[ORM\ManyToOne(inversedBy: 'games')]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Cart $cart = null;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
+    #[ORM\Column]
+    private ?float $averageRating = null;
+
+    #[ORM\Column]
+    private ?int $ratingUserCount = null;
+
+    #[ORM\ManyToOne(inversedBy: 'games')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Cart $cart = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -50,9 +55,6 @@ class Game
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $thumbnail = null;
-
-    #[Vich\UploadableField(mapping: 'game_images', fileNameProperty: 'thumbnail')]
-    private ?File $thumbnailFile = null;
 
     #[ORM\Column(length: 255)]
     private ?string $minOs = null;
@@ -116,59 +118,47 @@ class Game
         $this->screenshots = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->downloads = new ArrayCollection();
-        if ($this->releaseDate === null) {
-            $this->releaseDate = new \DateTime(); // optional, only if you want a default right away
-        }
-    }
-
-    public function getAverageRating(): float
-    {
-        if ($this->reviews->isEmpty()) {
-            return 0;
-        }
-
-        $total = 0;
-        $users = [];
-        foreach ($this->reviews as $review) {
-            if(key_exists($review->getUser()->getId(), $users)) {
-                $users[$review->getUser()->getId()][] = $review->getRating();
-            } else {
-                $users[$review->getUser()->getId()] = [$review->getRating()];
-            }
-        }
-
-        foreach ($users as $authorId => $ratings) {
-            $rating = array_sum($ratings)/count($ratings);
-            $total += $rating;
-        }
-
-        return $total / count($users);
-    }
-
-    public function setThumbnailFile(?File $thumbnailFile = null): void
-    {
-        $this->thumbnailFile = $thumbnailFile;
-
-        if (null !== $thumbnailFile) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
-
-    public function getThumbnailFile(): ?File
-    {
-        return $this->thumbnailFile;
-    }
-
-    // Add and remove methods for collections...
-
-    public function __toString(): string
-    {
-        return $this->title;
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getGameId(): ?int
+    {
+        return $this->gameId;
+    }
+
+    public function setGameId(int $gameId): static
+    {
+        $this->gameId = $gameId;
+
+        return $this;
+    }
+
+    public function getAverageRating(): ?float
+    {
+        return $this->averageRating;
+    }
+
+    public function setAverageRating(float $averageRating): static
+    {
+        $this->averageRating = $averageRating;
+
+        return $this;
+    }
+
+    public function getRatingUserCount(): ?int
+    {
+        return $this->ratingUserCount;
+    }
+
+    public function setRatingUserCount(int $ratingUserCount): static
+    {
+        $this->ratingUserCount = $ratingUserCount;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -188,7 +178,7 @@ class Game
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
+    public function setSlug(?string $slug): static
     {
         $this->slug = $slug;
 
@@ -231,12 +221,12 @@ class Game
         return $this;
     }
 
-    public function getReleaseDate(): \DateTimeInterface
+    public function getReleaseDate(): ?\DateTime
     {
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(\DateTimeInterface $releaseDate): static
+    public function setReleaseDate(?\DateTime $releaseDate): static
     {
         $this->releaseDate = $releaseDate;
 
@@ -255,12 +245,12 @@ class Game
         return $this;
     }
 
-    public function getFreeUntil(): ?\DateTimeInterface
+    public function getFreeUntil(): ?\DateTime
     {
         return $this->freeUntil;
     }
 
-    public function setFreeUntil(?\DateTimeInterface $freeUntil): static
+    public function setFreeUntil(?\DateTime $freeUntil): static
     {
         $this->freeUntil = $freeUntil;
 
@@ -399,14 +389,26 @@ class Game
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    public function setUpdatedAt(?\DateTime $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): static
+    {
+        $this->cart = $cart;
 
         return $this;
     }
@@ -558,34 +560,6 @@ class Game
             }
         }
 
-        return $this;
-    }
-
-    
-
-    public function setSubmittedAt(\DateTimeInterface $submittedAt): static
-    {
-        $this->submittedAt = $submittedAt;
-
-        return $this;
-    }
-
-    
-
-    public function setSubmittedBy(?User $submittedBy): static
-    {
-        $this->submittedBy = $submittedBy;
-
-        return $this;
-    }
-    public function getCart(): ?Cart
-    {
-        return $this->cart;
-    }
-
-    public function setCart(?Cart $cart): static
-    {
-        $this->cart = $cart;
         return $this;
     }
 }
