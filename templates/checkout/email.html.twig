@@ -22,15 +22,16 @@
     <tfoot>
     <tr>
         <td><strong>Sous-total</strong></td>
-        <td align="right">{{ total|number_format(2, '.', ',') }} €</td>
+        <td align="right">£{{ total|number_format(2, '.', ',') }} </td>
+
     </tr>
     <tr>
         <td>TVA (10%)</td>
-        <td align="right">{{ tax|number_format(2, '.', ',') }} €</td>
+        <td align="right">£{{ tax|number_format(2, '.', ',') }} </td>
     </tr>
     <tr>
         <td><strong>Total TTC</strong></td>
-        <td align="right"><strong>{{ totalTTC|number_format(2, '.', ',') }} €</strong></td>
+        <td align="right"><strong>£{{ totalTTC|number_format(2, '.', ',') }} </strong></td>
     </tr>
     </tfoot>
 </table>

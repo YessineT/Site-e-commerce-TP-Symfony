@@ -34,3 +34,6 @@ app_signin:
 library:
     path: /library
     controller: App\Controller\LibraryController::index
+payment_paypal_success:
+    path: /payment/paypal/success
+    controller: App\Controller\PaymentController::paypalSuccess

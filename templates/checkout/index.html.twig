@@ -174,51 +174,60 @@
         </div>
 
         {# Script paypall #}
-        {# 1. Load the PayPal JS SDK with Fastlane component #}
-        <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=EUR"></script>
+        {# Load the PayPal JS SDK with your client ID and USD currency #}
+        <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=USD"></script>
         <script>
             paypal.Buttons({
                 createOrder: function(data, actions) {
-                    return fetch('/paypal/order/create/{{ order.id }}', {
+                    return fetch('{{ path("paypal_order_create", {"orderId": order.id}) }}', {
                         method: 'POST'
-                    }).then(function(res) {
-                        if (!res.ok) {
-                            throw new Error('Failed to create PayPal order');
-                        }
-                        return res.json();
-                    }).then(function(data) {
-                        if (data.error) {
-                            console.error('PayPal Error:', data.error);
-                            alert('Une erreur est survenue lors de la création de la commande PayPal.');
-                            throw new Error(data.error);
-                        }
-                        return data.id;
-                    });
+                    })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Failed to create PayPal order');
+                            return res.json();
+                        })
+                        .then(json => {
+                            console.log('👉 createOrder JSON:', json);
+                            if (json.error) {
+                                alert('Erreur lors de la création de la commande PayPal : ' + json.error);
+                                throw new Error(json.error);
+                            }
+                            return json.id;  // this is the PayPal Order ID
+                        });
                 },
+
                 onApprove: function(data, actions) {
-                    return fetch('/paypal/order/capture/' + data.orderID, {
+                    // Build the capture URL directly in JS
+                    const captureUrl = '/paypal/order/capture/' + data.orderID;
+
+                    return fetch(captureUrl, {
                         method: 'POST'
-                    }).then(function(res) {
-                        if (!res.ok) {
-                            throw new Error('Failed to capture PayPal order');
-                        }
-                        return res.json();
-                    }).then(function(details) {
-                        if (details.status === 'success') {
-                            window.location.href = '/payment/success/{{ order.id }}';
-                        } else {
-                            alert('Échec de la capture du paiement.');
-                        }
-                    }).catch(function(error) {
-                        console.error('Capture Error:', error);
-                        alert('Une erreur est survenue lors de la capture du paiement.');
-                    });
+                    })
+                        .then(res => {
+                            if (!res.ok) throw new Error('Failed to capture PayPal order');
+                            return res.json();
+                        })
+                        .then(json => {
+                            if (json.status === 'success') {
+                                // Redirect to your backend verify route, passing the PayPal Order ID as "token"
+                                window.location.href = '{{ path("payment_paypal_success", {"orderId": order.id}) }}?token=' + data.orderID;
+                            } else {
+                                alert('Échec de la capture du paiement.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Capture Error:', err);
+                            alert('Une erreur est survenue lors de la capture du paiement.');
+                        });
                 },
+
                 onError: function(err) {
                     console.error('PayPal SDK Error:', err);
                     alert('Une erreur est survenue avec PayPal.');
                 }
             }).render('#paypal-button-container');
         </script>
+
+
     </div>
 {% endblock %}
